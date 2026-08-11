@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="description"
+        content="Find plain-language answers to common questions about LegalSimple, traffic, renting, and employment."
+    >
+    <title>Frequently Asked Questions | LegalSimple</title>
+    <link
+        rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23102A43'/%3E%3Cpath d='M20 17h24M25 17v29M20 46h24' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E"
+    >
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="legal-companion.css">
+    <link rel="stylesheet" href="faq.css">
+    <script src="legal-companion.js" defer></script>
+    <script src="faq.js" defer></script>
+</head>
+<body class="faq-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="index.html" aria-label="LegalSimple home">
+                Legal<span>Simple</span>
+            </a>
+
+            <nav class="primary-navigation" aria-label="Primary navigation">
+                <ul class="nav-list">
+                    <li><a class="nav-link" href="index.html">Home</a></li>
+                    <li><a class="nav-link" href="document-simplifier.html">Document Simplifier</a></li>
+                    <li><a class="nav-link" href="RiskAnalyzer_LegalSimple.html">Risk Analyzer</a></li>
+                    <li><a class="nav-link" href="document-comparison.html">Compare Documents</a></li>
+                    <li><a class="nav-link" href="notice-generator.html">Notice Generator</a></li>
+                    <li><a class="nav-link" href="faq.html" aria-current="page">Legal FAQ</a></li>
+                    <li><a class="nav-link nav-link--button" href="auth.html">Sign Up / Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="faq-introduction" aria-labelledby="faq-page-heading">
+            <div class="container faq-introduction__layout">
+                <div>
+                    <p class="eyebrow">LegalSimple Help Center</p>
+                    <h1 id="faq-page-heading">Frequently Asked Questions</h1>
+                    <p class="hero-description">
+                        Find simple answers to common questions about using LegalSimple and everyday legal matters.
+                    </p>
+                </div>
+
+                <aside class="legal-notice faq-disclaimer" aria-labelledby="faq-disclaimer-heading">
+                    <div class="notice-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M12 11v5M12 8h.01"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 id="faq-disclaimer-heading">General information only</h2>
+                        <p>
+                            The information on this page is general guidance only and is not a substitute for advice
+                            from a qualified legal professional.
+                        </p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="section faq-workspace" aria-labelledby="browse-faq-heading">
+            <div class="container faq-container">
+                <div class="section-header section-header--left faq-workspace__heading">
+                    <p class="eyebrow">Browse Answers</p>
+                    <h2 id="browse-faq-heading">How can we help?</h2>
+                    <p>Choose a topic or search every question and answer.</p>
+                </div>
+
+                <div class="faq-search" role="search" aria-labelledby="faq-search-label">
+                    <label id="faq-search-label" for="faq-search-input">Search the FAQ</label>
+                    <div class="faq-search__controls">
+                        <input
+                            id="faq-search-input"
+                            type="search"
+                            placeholder="Search frequently asked questions"
+                            autocomplete="off"
+                            aria-describedby="faq-search-status"
+                        >
+                        <button class="button button--secondary" id="faq-search-clear" type="button" disabled>
+                            Clear search
+                        </button>
+                    </div>
+                    <p class="faq-search__status" id="faq-search-status" role="status" aria-live="polite" aria-atomic="true">
+                        All 32 questions are shown below.
+                    </p>
+                    <noscript>
+                        <p class="faq-noscript">
+                            Search and collapse controls require JavaScript. All questions and answers are shown below.
+                        </p>
+                    </noscript>
+                </div>
+
+                <nav class="faq-category-navigation" aria-labelledby="faq-category-heading">
+                    <h2 id="faq-category-heading">FAQ categories</h2>
+                    <div class="faq-categories">
+                        <a class="faq-category-link" href="#faq-general" data-faq-category="general">
+                            <span>General</span>
+                            <span class="faq-category-link__state" data-category-state hidden>Selected</span>
+                        </a>
+                        <a class="faq-category-link" href="#faq-traffic" data-faq-category="traffic">
+                            <span>Traffic</span>
+                            <span class="faq-category-link__state" data-category-state hidden>Selected</span>
+                        </a>
+                        <a class="faq-category-link" href="#faq-tenant-rent" data-faq-category="tenant-rent">
+                            <span>Tenant &amp; Rent</span>
+                            <span class="faq-category-link__state" data-category-state hidden>Selected</span>
+                        </a>
+                        <a class="faq-category-link" href="#faq-labor-employment" data-faq-category="labor-employment">
+                            <span>Labor &amp; Employment</span>
+                            <span class="faq-category-link__state" data-category-state hidden>Selected</span>
+                        </a>
+                    </div>
+                </nav>
+
+                <div class="faq-sections">
+                    <section class="faq-section" id="faq-general" data-faq-section="general" aria-labelledby="faq-general-heading">
+                        <div class="faq-section__header">
+                            <p class="faq-section__number">8 questions</p>
+                            <h2 id="faq-general-heading">General</h2>
+                            <p>Learn what LegalSimple does and how to use its information responsibly.</p>
+                        </div>
+
+                        <div class="faq-list">
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-general-1" type="button" aria-expanded="true" aria-controls="faq-answer-general-1">
+                                        <span>What is LegalSimple?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-general-1" role="region" aria-labelledby="faq-question-general-1">
+                                    <p>LegalSimple is a website with tools and plain-language information intended to make common legal documents and topics easier to understand.</p>
+                                    <p>It can support an initial review, but the meaning or effect of a document may still depend on its full wording, the facts, and applicable law.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-general-2" type="button" aria-expanded="true" aria-controls="faq-answer-general-2">
+                                        <span>Does LegalSimple provide legal advice?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-general-2" role="region" aria-labelledby="faq-question-general-2">
+                                    <p>No. LegalSimple provides general legal information and document-review tools, not advice tailored to your circumstances.</p>
+                                    <p>A qualified legal professional can review the complete facts, explain available options, and advise you about a particular decision.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-general-3" type="button" aria-expanded="true" aria-controls="faq-answer-general-3">
+                                        <span>Who can use LegalSimple?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-general-3" role="region" aria-labelledby="faq-question-general-3">
+                                    <p>Anyone may read the general information on this website to become more familiar with common legal-document issues.</p>
+                                    <p>The content may not fit every user, country, or situation. Check current official information and obtain professional advice when the issue matters to you.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-general-4" type="button" aria-expanded="true" aria-controls="faq-answer-general-4">
+                                        <span>Is the information on LegalSimple legally binding?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-general-4" role="region" aria-labelledby="faq-question-general-4">
+                                    <p>No. Information shown on LegalSimple does not create a court order, contract, official decision, or lawyer-client relationship.</p>
+                                    <p>The original document, applicable law, and any decision from a properly authorized body remain important. Do not rely on a summary as the authoritative text.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-general-5" type="button" aria-expanded="true" aria-controls="faq-answer-general-5">
+                                        <span>Should I still consult a lawyer?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-general-5" role="region" aria-labelledby="faq-question-general-5">
+                                    <p>Consider speaking with a qualified lawyer when a dispute, deadline, court matter, arrest, eviction, job loss, or significant money or property is involved.</p>
+                                    <p>Bring copies of relevant agreements, notices, messages, and other records so the professional can assess the complete situation.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-general-6" type="button" aria-expanded="true" aria-controls="faq-answer-general-6">
+                                        <span>How should I use the documents generated by LegalSimple?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-general-6" role="region" aria-labelledby="faq-question-general-6">
+                                    <p>Treat any generated draft as a starting point. Check names, dates, facts, requested actions, and any wording against your source documents.</p>
+                                    <p>Requirements may vary by document and applicable law. Have an important draft reviewed before signing, sending, or relying on it.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-general-7" type="button" aria-expanded="true" aria-controls="faq-answer-general-7">
+                                        <span>Is my information stored by LegalSimple?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-general-7" role="region" aria-labelledby="faq-question-general-7">
+                                    <p>The FAQ can be read without submitting personal information.</p>
+                                    <p>Before entering sensitive material into any online service, review its published privacy notice and confirm how the information will be handled.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-general-8" type="button" aria-expanded="true" aria-controls="faq-answer-general-8">
+                                        <span>What should I do in an emergency legal situation?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-general-8" role="region" aria-labelledby="faq-question-general-8">
+                                    <p>Do not rely on this website for an emergency. If someone is in immediate danger, seek appropriate local emergency help.</p>
+                                    <p>For an urgent arrest, hearing, eviction, deadline, or threat of serious loss, contact a qualified legal professional promptly and keep the relevant documents with you.</p>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+
+                    <section class="faq-section" id="faq-traffic" data-faq-section="traffic" aria-labelledby="faq-traffic-heading">
+                        <div class="faq-section__header">
+                            <p class="faq-section__number">8 questions</p>
+                            <h2 id="faq-traffic-heading">Traffic</h2>
+                            <p>General steps for documents, traffic notices, road accidents, and vehicle issues.</p>
+                        </div>
+
+                        <div class="faq-list">
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-traffic-1" type="button" aria-expanded="true" aria-controls="faq-answer-traffic-1">
+                                        <span>What documents should a driver carry?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-traffic-1" role="region" aria-labelledby="faq-question-traffic-1">
+                                    <p>Drivers commonly need valid documents relating to the driver and vehicle, but the exact documents and acceptable formats depend on applicable rules.</p>
+                                    <p>Check current official requirements before driving. Keep documents valid, readable, and available in the form the relevant authority accepts.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-traffic-2" type="button" aria-expanded="true" aria-controls="faq-answer-traffic-2">
+                                        <span>What should I do if I receive a traffic case or fine?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-traffic-2" role="region" aria-labelledby="faq-question-traffic-2">
+                                    <p>Read the notice carefully and keep a copy. Confirm who issued it, what it says happened, and how the notice says you may respond or challenge it.</p>
+                                    <p>Deadlines and procedures vary. Check current official instructions and obtain legal advice promptly if you dispute the allegation or do not understand the consequences.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-traffic-3" type="button" aria-expanded="true" aria-controls="faq-answer-traffic-3">
+                                        <span>What should I do after a road accident?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-traffic-3" role="region" aria-labelledby="faq-question-traffic-3">
+                                    <p>Put safety first and seek medical or emergency help when needed. If it is safe, exchange relevant identifying and vehicle information with the other people involved.</p>
+                                    <p>Record what happened and check applicable reporting and insurance requirements. Avoid guessing about fault before the facts and relevant law have been reviewed.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-traffic-4" type="button" aria-expanded="true" aria-controls="faq-answer-traffic-4">
+                                        <span>Can traffic authorities seize driving documents?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-traffic-4" role="region" aria-labelledby="faq-question-traffic-4">
+                                    <p>An authority's power to retain a licence or other document may depend on the circumstances and applicable law.</p>
+                                    <p>Ask for the stated reason and any receipt or written record that is available. Keep copies and seek qualified advice if you believe the action was improper.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-traffic-5" type="button" aria-expanded="true" aria-controls="faq-answer-traffic-5">
+                                        <span>What should I do if my vehicle is impounded?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-traffic-5" role="region" aria-labelledby="faq-question-traffic-5">
+                                    <p>Confirm which authority ordered the impoundment, where the vehicle is held, and what written reason or reference number was provided.</p>
+                                    <p>Use current official information to check the release or challenge process. A lawyer may be helpful if ownership, alleged offences, damage, or continued detention is disputed.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-traffic-6" type="button" aria-expanded="true" aria-controls="faq-answer-traffic-6">
+                                        <span>Is it necessary to report every road accident?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-traffic-6" role="region" aria-labelledby="faq-question-traffic-6">
+                                    <p>Not every accident is treated the same. Reporting duties may depend on injury, damage, the people or property involved, and applicable law.</p>
+                                    <p>Check current official rules and any insurance policy requirements as soon as practical. When uncertain, obtain advice rather than assuming no report is needed.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-traffic-7" type="button" aria-expanded="true" aria-controls="faq-answer-traffic-7">
+                                        <span>What evidence should I collect after an accident?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-traffic-7" role="region" aria-labelledby="faq-question-traffic-7">
+                                    <p>If it is safe and lawful, record the location, time, road conditions, vehicle positions, visible damage, and contact details for drivers and witnesses.</p>
+                                    <p>Keep photographs, medical records, repair estimates, reports, and communications together. Preserve original files and write down your recollection while it is fresh.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-traffic-8" type="button" aria-expanded="true" aria-controls="faq-answer-traffic-8">
+                                        <span>When should I consult a lawyer about a traffic matter?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-traffic-8" role="region" aria-labelledby="faq-question-traffic-8">
+                                    <p>Consider advice when there are injuries, a serious allegation, disputed responsibility, possible loss of driving privileges, impoundment, or significant financial loss.</p>
+                                    <p>Get help promptly when a notice or hearing has a response date. Bring the notice, driving documents, photographs, reports, and relevant communications.</p>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+
+                    <section class="faq-section" id="faq-tenant-rent" data-faq-section="tenant-rent" aria-labelledby="faq-tenant-rent-heading">
+                        <div class="faq-section__header">
+                            <p class="faq-section__number">8 questions</p>
+                            <h2 id="faq-tenant-rent-heading">Tenant &amp; Rent</h2>
+                            <p>General information for recording rental terms and handling common concerns.</p>
+                        </div>
+
+                        <div class="faq-list">
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-tenant-1" type="button" aria-expanded="true" aria-controls="faq-answer-tenant-1">
+                                        <span>Should a rental agreement be written?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-tenant-1" role="region" aria-labelledby="faq-question-tenant-1">
+                                    <p>A written agreement gives both parties a clearer record of the property, payments, responsibilities, and agreed rules.</p>
+                                    <p>Whether a particular agreement must be written, and the effect of an oral arrangement, may depend on applicable law and the facts. Each party should keep a signed copy.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-tenant-2" type="button" aria-expanded="true" aria-controls="faq-answer-tenant-2">
+                                        <span>What information should be included in a rental agreement?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-tenant-2" role="region" aria-labelledby="faq-question-tenant-2">
+                                    <p>Common terms identify the parties and property, rental period, rent and payment method, deposit, utilities, repairs, access, and how the agreement may end.</p>
+                                    <p>The document should reflect what was actually agreed. Review unclear terms and any required notices or inventory records before signing.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-tenant-3" type="button" aria-expanded="true" aria-controls="faq-answer-tenant-3">
+                                        <span>Can a landlord increase rent at any time?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-tenant-3" role="region" aria-labelledby="faq-question-tenant-3">
+                                    <p>This may depend on the rental agreement, applicable law, the type of tenancy, and any notice that was given.</p>
+                                    <p>Ask for the proposed increase in writing and review the amount, start date, and stated basis. Do not assume either party is automatically correct without checking the relevant rules.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-tenant-4" type="button" aria-expanded="true" aria-controls="faq-answer-tenant-4">
+                                        <span>What should a tenant do if repairs are not completed?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-tenant-4" role="region" aria-labelledby="faq-question-tenant-4">
+                                    <p>Report the problem in writing, describe its effect, and keep dated photographs, messages, and copies of earlier requests. Allow access for repairs when properly arranged.</p>
+                                    <p>Available steps depend on the agreement, applicable law, urgency, and notices exchanged. Seek qualified advice before withholding rent or arranging deductions.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-tenant-5" type="button" aria-expanded="true" aria-controls="faq-answer-tenant-5">
+                                        <span>Can a landlord enter a rented property without notice?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-tenant-5" role="region" aria-labelledby="faq-question-tenant-5">
+                                    <p>Access rights may depend on the rental agreement, applicable law, the reason for entry, and whether there is an emergency.</p>
+                                    <p>A tenant can ask that ordinary visits be arranged in writing and keep a record of unexpected entries. Obtain advice if access becomes unsafe, repeated, or disputed.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-tenant-6" type="button" aria-expanded="true" aria-controls="faq-answer-tenant-6">
+                                        <span>What happens if rent is paid late?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-tenant-6" role="region" aria-labelledby="faq-question-tenant-6">
+                                    <p>Possible consequences depend on the agreement, applicable law, payment history, and any notice the landlord gives. A late payment does not produce the same result in every case.</p>
+                                    <p>Communicate promptly, keep proof of payments, and ask for any proposed arrangement in writing. Review a warning or termination notice quickly.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-tenant-7" type="button" aria-expanded="true" aria-controls="faq-answer-tenant-7">
+                                        <span>How should a tenant give notice before moving out?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-tenant-7" role="region" aria-labelledby="faq-question-tenant-7">
+                                    <p>Review the agreement and applicable law for the required timing, content, and delivery method. A written notice should clearly identify the tenancy and intended move-out date.</p>
+                                    <p>Keep proof that the notice was delivered. Record the property's condition, arrange any inspection, return keys as agreed, and keep the final payment records.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-tenant-8" type="button" aria-expanded="true" aria-controls="faq-answer-tenant-8">
+                                        <span>What should a tenant do if a security deposit is not returned?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-tenant-8" role="region" aria-labelledby="faq-question-tenant-8">
+                                    <p>Ask in writing for the deposit or a clear explanation of any deductions. Keep the agreement, payment receipt, move-in and move-out records, photographs, and communications.</p>
+                                    <p>Whether a deduction is allowed depends on the agreement, applicable law, the property's condition, and the facts. Consider qualified advice about available dispute steps.</p>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+
+                    <section class="faq-section" id="faq-labor-employment" data-faq-section="labor-employment" aria-labelledby="faq-labor-employment-heading">
+                        <div class="faq-section__header">
+                            <p class="faq-section__number">8 questions</p>
+                            <h2 id="faq-labor-employment-heading">Labor &amp; Employment</h2>
+                            <p>General guidance about employment records, pay, leave, workplace conduct, and termination.</p>
+                        </div>
+
+                        <div class="faq-list">
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-labor-1" type="button" aria-expanded="true" aria-controls="faq-answer-labor-1">
+                                        <span>Should an employment agreement be in writing?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-labor-1" role="region" aria-labelledby="faq-question-labor-1">
+                                    <p>A written agreement gives the employer and worker a clearer record of the role, pay, working arrangements, and other terms.</p>
+                                    <p>Whether writing is required and which rights apply may depend on employment status and applicable law. Ask for a copy of every document you sign.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-labor-2" type="button" aria-expanded="true" aria-controls="faq-answer-labor-2">
+                                        <span>What information should an appointment letter contain?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-labor-2" role="region" aria-labelledby="faq-question-labor-2">
+                                    <p>Common details include the employer, job title and duties, start date, workplace, working arrangements, pay basis, benefits, leave, and relevant policies.</p>
+                                    <p>It should also explain important conditions and how the relationship may end. Ask for unclear terms to be explained before accepting or signing.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-labor-3" type="button" aria-expanded="true" aria-controls="faq-answer-labor-3">
+                                        <span>What should an employee do if wages are unpaid?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-labor-3" role="region" aria-labelledby="faq-question-labor-3">
+                                    <p>Keep the agreement, attendance or time records, pay statements, bank records, and messages about the missing payment. Raise the issue in writing through an appropriate workplace channel.</p>
+                                    <p>Available steps depend on employment status, contract terms, applicable labor law, and the facts. A qualified lawyer or labor authority can explain current procedures.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-labor-4" type="button" aria-expanded="true" aria-controls="faq-answer-labor-4">
+                                        <span>Can an employer terminate an employee without notice?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-labor-4" role="region" aria-labelledby="faq-question-labor-4">
+                                    <p>This may depend on employment status, contract terms, workplace policy, applicable labor law, and the reason and process used.</p>
+                                    <p>Ask for the decision and reasons in writing, keep every notice, and review any document before signing it. Obtain prompt advice if you may need to challenge the decision.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-labor-5" type="button" aria-expanded="true" aria-controls="faq-answer-labor-5">
+                                        <span>What should an employee do after workplace harassment?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-labor-5" role="region" aria-labelledby="faq-question-labor-5">
+                                    <p>Prioritize immediate safety. Record dates, words or actions, witnesses, reports, and relevant messages, and review the workplace reporting policy if it is safe to do so.</p>
+                                    <p>Options depend on the conduct, workplace process, employment status, and applicable law. Consider help from a qualified lawyer or labor authority, especially if there is retaliation or continuing risk.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-labor-6" type="button" aria-expanded="true" aria-controls="faq-answer-labor-6">
+                                        <span>Are employees entitled to leave?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-labor-6" role="region" aria-labelledby="faq-question-labor-6">
+                                    <p>Leave rights may depend on employment status, workplace policy, contract terms, applicable labor law, and the reason for leave.</p>
+                                    <p>Check the current written policy and ask how to request and record leave. Keep copies of requests, approvals, refusals, and any supporting documents.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-labor-7" type="button" aria-expanded="true" aria-controls="faq-answer-labor-7">
+                                        <span>What documents should an employee keep?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-labor-7" role="region" aria-labelledby="faq-question-labor-7">
+                                    <p>Keep lawful personal copies of the agreement, appointment letters, policies, pay records, attendance or time records, leave records, evaluations, and formal notices.</p>
+                                    <p>Also preserve relevant communications about changes, complaints, discipline, or termination. Store records securely and do not take confidential material you are not entitled to keep.</p>
+                                </div>
+                            </article>
+
+                            <article class="faq-item" data-faq-item>
+                                <h3>
+                                    <button class="faq-question" id="faq-question-labor-8" type="button" aria-expanded="true" aria-controls="faq-answer-labor-8">
+                                        <span>When should an employee consult a lawyer or labor authority?</span>
+                                        <span class="faq-question__icon" aria-hidden="true"></span>
+                                    </button>
+                                </h3>
+                                <div class="faq-answer" id="faq-answer-labor-8" role="region" aria-labelledby="faq-question-labor-8">
+                                    <p>Consider prompt advice for unpaid wages, unsafe conditions, harassment, retaliation, discrimination concerns, termination, or significant financial loss.</p>
+                                    <p>Response periods may apply in some situations. Bring the contract, policies, pay records, notices, and a clear timeline so the professional or authority can assess the facts.</p>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="faq-empty-state" id="faq-empty-state" hidden>
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="m16 16 4 4M8.5 11h5"></path>
+                    </svg>
+                    <h2>No matching questions</h2>
+                    <p>No matching questions were found. Try using different keywords.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-help-section" aria-labelledby="faq-help-heading">
+            <div class="container">
+                <div class="faq-help-card">
+                    <div>
+                        <p class="eyebrow">Next Steps</p>
+                        <h2 id="faq-help-heading">Still need help?</h2>
+                        <p>
+                            If your question involves an urgent dispute, court deadline, arrest, eviction, job
+                            termination, or significant financial loss, consider contacting a qualified legal
+                            professional.
+                        </p>
+                    </div>
+                    <div class="faq-help-actions" aria-label="LegalSimple tools">
+                        <a class="button button--primary" href="document-simplifier.html">Simplify a Document</a>
+                        <a class="button button--secondary" href="document-comparison.html">Compare Documents</a>
+                        <a class="button button--secondary" href="notice-generator.html">Create a Notice Draft</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-about">
+                <a class="brand brand--footer" href="index.html">Legal<span>Simple</span></a>
+                <p>Making legal documents and everyday legal information easier to understand.</p>
+            </div>
+
+            <nav class="footer-navigation" aria-label="Footer feature navigation">
+                <h2>Features</h2>
+                <ul>
+                    <li><a href="document-simplifier.html">Document Simplifier</a></li>
+                    <li><a href="RiskAnalyzer_LegalSimple.html">Risk Analyzer</a></li>
+                    <li><a href="document-comparison.html">Compare Documents</a></li>
+                    <li><a href="notice-generator.html">Notice Generator</a></li>
+                    <li><a href="faq.html" aria-current="page">Legal FAQ</a></li>
+                </ul>
+            </nav>
+
+            <div class="footer-disclaimer">
+                <h2>Responsible use</h2>
+                <p>
+                    LegalSimple supports preliminary review and does not replace advice from a qualified legal
+                    professional.
+                </p>
+            </div>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>&copy; 2026 LegalSimple</p>
+        </div>
+    </footer>
+</body>
+</html>

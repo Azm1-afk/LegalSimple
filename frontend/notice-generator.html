@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="description"
+        content="Generate common legal notices and letters — demand letters, cease and desist notices, tenancy notices, and reminder letters — in plain language with LegalSimple's Notice Generator."
+    >
+    <title>Notice Generator | LegalSimple</title>
+    <link
+        rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23102A43'/%3E%3Cpath d='M20 17h24M25 17v29M20 46h24' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E"
+    >
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="legal-companion.css">
+    <link rel="stylesheet" href="notice-generator.css">
+    <script src="legal-companion.js" defer></script>
+</head>
+<body class="notice-generator-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="index.html" aria-label="LegalSimple home">
+                Legal<span>Simple</span>
+            </a>
+
+            <nav class="primary-navigation" aria-label="Primary navigation">
+                <ul class="nav-list">
+                    <li><a class="nav-link" href="index.html">Home</a></li>
+                    <li><a class="nav-link" href="document-simplifier.html">Document Simplifier</a></li>
+                    <li><a class="nav-link" href="RiskAnalyzer_LegalSimple.html">Risk Analyzer</a></li>
+                    <li><a class="nav-link" href="document-comparison.html">Compare Documents</a></li>
+                    <li><a class="nav-link" href="notice-generator.html" aria-current="page">Notice Generator</a></li>
+                    <li><a class="nav-link" href="faq.html">Legal FAQ</a></li>
+                    <li><a class="nav-link nav-link--button" href="auth.html">Sign Up / Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <!-- Hero -->
+        <section class="tool-hero" aria-labelledby="hero-heading">
+            <div class="container tool-hero__content">
+                <p class="eyebrow">Legal Notice &amp; Letter Generator</p>
+                <h1 id="hero-heading">Prepare a clear, properly structured legal notice in minutes.</h1>
+                <p class="hero-description">
+                    Choose a notice type, fill in the details, and get a plain-language draft you can review, copy, or
+                    print — ready for a legal professional's final check.
+                </p>
+            </div>
+        </section>
+
+        <!-- Generator -->
+        <section class="section generator-section" aria-labelledby="generator-heading">
+            <div class="container generator-layout">
+
+                <form class="generator-form" id="notice-form" aria-labelledby="generator-heading">
+                    <h2 id="generator-heading">1. Enter the details</h2>
+
+                    <div class="form-field">
+                        <label for="notice-type">Notice type</label>
+                        <select id="notice-type" name="notice-type">
+                            <option value="demand" selected>Demand Letter (Payment)</option>
+                            <option value="cease">Cease and Desist Notice</option>
+                            <option value="vacate">Notice to Vacate / End Tenancy</option>
+                            <option value="reminder">Legal Reminder Notice</option>
+                            <option value="general">General Legal Notice</option>
+                        </select>
+                    </div>
+
+                    <fieldset class="form-fieldset">
+                        <legend>Sender (from)</legend>
+                        <div class="form-field">
+                            <label for="sender-name">Full name</label>
+                            <input type="text" id="sender-name" placeholder="e.g. Rafiq Ahmed">
+                        </div>
+                        <div class="form-field">
+                            <label for="sender-address">Address</label>
+                            <textarea id="sender-address" rows="2" placeholder="House, road, area, city"></textarea>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="form-fieldset">
+                        <legend>Recipient (to)</legend>
+                        <div class="form-field">
+                            <label for="recipient-name">Full name</label>
+                            <input type="text" id="recipient-name" placeholder="e.g. ABC Enterprise">
+                        </div>
+                        <div class="form-field">
+                            <label for="recipient-address">Address</label>
+                            <textarea id="recipient-address" rows="2" placeholder="House, road, area, city"></textarea>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="form-fieldset">
+                        <legend>Notice details</legend>
+
+                        <div class="form-field">
+                            <label for="notice-date">Date</label>
+                            <input type="date" id="notice-date">
+                        </div>
+
+                        <div class="form-field">
+                            <label for="notice-subject">Subject line</label>
+                            <input type="text" id="notice-subject" placeholder="Short subject for this notice">
+                        </div>
+
+                        <!-- Type-specific fields -->
+                        <div class="form-field type-field" data-type="demand">
+                            <label for="amount-due">Amount due</label>
+                            <input type="text" id="amount-due" placeholder="e.g. BDT 50,000">
+                        </div>
+                        <div class="form-field type-field" data-type="demand vacate">
+                            <label for="due-date">Deadline / date to comply</label>
+                            <input type="date" id="due-date">
+                        </div>
+
+                        <div class="form-field">
+                            <label for="notice-body">Explain the situation</label>
+                            <textarea id="notice-body" rows="5" placeholder="Describe what happened, in your own words. The generator will format it for you."></textarea>
+                        </div>
+                    </fieldset>
+
+                    <p class="form-hint">
+                        This draft is a starting point, not finished legal advice — have it reviewed before you send it.
+                    </p>
+                </form>
+
+                <div class="preview-column">
+                    <h2>2. Review your draft</h2>
+                    <article class="letter-preview" aria-label="Generated notice draft">
+                        <div class="letter-paper" id="letter-output">
+                            <p class="letter-placeholder">Your draft will appear here as you fill in the form.</p>
+                        </div>
+                    </article>
+
+                    <div class="preview-actions">
+                        <button type="button" class="button button--primary" id="copy-button">Copy text</button>
+                        <button type="button" class="button button--secondary" id="print-button">Print / Save as PDF</button>
+                    </div>
+                    <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Responsible-use notice -->
+        <section class="notice-section" aria-labelledby="legal-notice-heading">
+            <div class="container">
+                <aside class="legal-notice">
+                    <div class="notice-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M12 11v5M12 8h.01"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 id="legal-notice-heading">Important legal information</h2>
+                        <p>
+                            This generator produces a plain-language draft only. It does not check local legal
+                            requirements, deadlines, or delivery rules for your notice type. Have a qualified legal
+                            professional review the draft before you send it, especially for disputes, deadlines, or
+                            matters with significant legal consequences.
+                        </p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-about">
+                <a class="brand brand--footer" href="index.html">Legal<span>Simple</span></a>
+                <p>Making legal documents and everyday legal information easier to understand.</p>
+            </div>
+
+            <nav class="footer-navigation" aria-label="Footer feature navigation">
+                <h2>Features</h2>
+                <ul>
+                    <li><a href="document-simplifier.html">Document Simplifier</a></li>
+                    <li><a href="RiskAnalyzer_LegalSimple.html">Risk Analyzer</a></li>
+                    <li><a href="document-comparison.html">Compare Documents</a></li>
+                    <li><a href="notice-generator.html">Notice Generator</a></li>
+                    <li><a href="faq.html">Legal FAQ</a></li>
+                </ul>
+            </nav>
+
+            <div class="footer-disclaimer">
+                <h2>Responsible use</h2>
+                <p>
+                    LegalSimple supports preliminary review and does not replace advice from a qualified legal
+                    professional.
+                </p>
+            </div>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>© 2026 LegalSimple</p>
+        </div>
+    </footer>
+
+    <script src="notice-generator.js"></script>
+</body>
+</html>

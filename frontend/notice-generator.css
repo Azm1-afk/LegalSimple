@@ -1,0 +1,164 @@
+/* Notice Generator — page-specific styles.
+   Reuses design tokens (colors, spacing, radius, shadow) defined in styles.css.
+   Kept in its own file so it doesn't conflict with edits to the shared stylesheet. */
+
+.notice-generator-page .generator-section {
+    background: var(--color-surface);
+}
+
+.notice-generator-page .generator-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-2xl);
+    align-items: start;
+}
+
+/* Form */
+.notice-generator-page .generator-form h2,
+.notice-generator-page .preview-column h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-lg);
+}
+
+.notice-generator-page .form-fieldset {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-lg);
+    margin: 0 0 var(--space-lg);
+    background: var(--color-surface);
+}
+
+.notice-generator-page .form-fieldset legend {
+    padding: 0 var(--space-xs);
+    font-weight: 650;
+    color: var(--color-navy-900);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.notice-generator-page .form-field {
+    margin-bottom: var(--space-md);
+}
+
+.notice-generator-page .form-field:last-child {
+    margin-bottom: 0;
+}
+
+.notice-generator-page .form-field label {
+    display: block;
+    margin-bottom: var(--space-2xs);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+.notice-generator-page .form-field input,
+.notice-generator-page .form-field select,
+.notice-generator-page .form-field textarea {
+    width: 100%;
+    padding: var(--space-sm);
+    border: 1px solid var(--color-border);
+    border-radius: calc(var(--radius) - 4px);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.notice-generator-page .form-field input:hover,
+.notice-generator-page .form-field select:hover,
+.notice-generator-page .form-field textarea:hover {
+    border-color: var(--color-teal-700);
+}
+
+.notice-generator-page .form-field input:focus,
+.notice-generator-page .form-field select:focus,
+.notice-generator-page .form-field textarea:focus {
+    outline: none;
+    border-color: var(--color-focus);
+    box-shadow: 0 0 0 3px rgba(22, 122, 120, 0.15);
+}
+
+.notice-generator-page .form-field textarea {
+    resize: vertical;
+}
+
+.notice-generator-page .form-hint {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+/* Notice draft */
+.notice-generator-page .letter-preview {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-xl);
+    margin-bottom: var(--space-lg);
+    min-height: 22rem;
+}
+
+.notice-generator-page .letter-paper {
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--color-text);
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+.notice-generator-page .letter-placeholder {
+    color: var(--color-text-muted);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-style: italic;
+}
+
+.notice-generator-page .preview-actions {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.notice-generator-page .preview-actions .button {
+    cursor: pointer;
+}
+
+.notice-generator-page .copy-status {
+    margin-top: var(--space-sm);
+    font-size: 0.9rem;
+    color: var(--color-teal-700);
+    min-height: 1.2em;
+}
+
+@media (max-width: 63.99rem) {
+    .notice-generator-page .generator-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media print {
+    .notice-generator-page .site-header,
+    .notice-generator-page .site-footer,
+    .notice-generator-page .tool-hero,
+    .notice-generator-page .generator-form,
+    .notice-generator-page .preview-column > h2,
+    .notice-generator-page .preview-actions,
+    .notice-generator-page .copy-status,
+    .notice-generator-page .notice-section {
+        display: none !important;
+    }
+
+    .notice-generator-page .generator-section {
+        padding: 0;
+    }
+
+    .notice-generator-page .generator-layout {
+        display: block;
+    }
+
+    .notice-generator-page .letter-preview {
+        border: 0;
+        box-shadow: none;
+        padding: 0;
+    }
+}

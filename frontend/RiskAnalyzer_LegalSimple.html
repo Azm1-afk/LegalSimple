@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="description"
+        content="Use LegalSimple's Clause Risk Analyzer guide to review legal clauses by risk level."
+    >
+    <title>Risk Analyzer | LegalSimple</title>
+    <link
+        rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23102A43'/%3E%3Cpath d='M20 17h24M25 17v29M20 46h24' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E"
+    >
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="legal-companion.css">
+    <link rel="stylesheet" href="risk-analyzer.css">
+    <script src="legal-companion.js" defer></script>
+</head>
+<body class="risk-analyzer-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="index.html" aria-label="LegalSimple home">
+                Legal<span>Simple</span>
+            </a>
+
+            <nav class="primary-navigation" aria-label="Primary navigation">
+                <ul class="nav-list">
+                    <li><a class="nav-link" href="index.html">Home</a></li>
+                    <li><a class="nav-link" href="document-simplifier.html">Document Simplifier</a></li>
+                    <li>
+                        <a class="nav-link" href="RiskAnalyzer_LegalSimple.html" aria-current="page">
+                            Risk Analyzer
+                        </a>
+                    </li>
+                    <li><a class="nav-link" href="document-comparison.html">Compare Documents</a></li>
+                    <li><a class="nav-link" href="notice-generator.html">Notice Generator</a></li>
+                    <li><a class="nav-link" href="faq.html">Legal FAQ</a></li>
+                    <li><a class="nav-link nav-link--button" href="auth.html">Sign Up / Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="tool-hero" aria-labelledby="risk-page-heading">
+            <div class="container tool-hero__content">
+                <p class="eyebrow">Clause Risk Analyzer</p>
+                <h1 id="risk-page-heading">Find the clauses that deserve a closer look.</h1>
+                <p class="hero-description">
+                    Review common clause categories, identify language that may need attention, and learn why certain
+                    terms deserve a closer reading.
+                </p>
+            </div>
+        </section>
+
+        <section class="risk-workspace-section" aria-labelledby="workspace-heading">
+            <div class="container">
+                <div class="section-heading">
+                    <p class="eyebrow">Review workspace</p>
+                    <h2 id="workspace-heading">Add legal content for review</h2>
+                    <p>
+                        Choose a plain-text document or paste a clause, then use the risk reference to guide a careful
+                        reading of the language.
+                    </p>
+                </div>
+
+                <div class="risk-workspace">
+                    <form class="risk-input-panel" aria-labelledby="input-panel-heading">
+                        <div class="panel-heading">
+                            <span class="panel-step" aria-hidden="true">01</span>
+                            <div>
+                                <h3 id="input-panel-heading">Document input</h3>
+                                <p>Use either option below to keep the relevant legal wording close at hand.</p>
+                            </div>
+                        </div>
+
+                        <div class="risk-field">
+                            <label for="document-upload">Upload a document</label>
+                            <p id="upload-help" class="field-help">
+                                Plain-text files only. Remove sensitive personal information before selecting a file.
+                            </p>
+                            <input
+                                class="risk-file-input"
+                                type="file"
+                                id="document-upload"
+                                name="document-upload"
+                                accept=".txt,text/plain"
+                                aria-describedby="upload-help"
+                            >
+                        </div>
+
+                        <div class="input-divider" aria-hidden="true">
+                            <span>or</span>
+                        </div>
+
+                        <div class="risk-field">
+                            <label for="clause-input">Paste a legal clause</label>
+                            <p id="clause-help" class="field-help">
+                                Keep the clause visible here while consulting the risk reference.
+                            </p>
+                            <textarea
+                                id="clause-input"
+                                name="clause-input"
+                                class="risk-textarea"
+                                rows="9"
+                                placeholder="Paste a clause from a lease, service agreement, employment contract, or other legal document."
+                                aria-describedby="clause-help"
+                            ></textarea>
+                        </div>
+
+                        <div class="risk-form-footer">
+                            <button class="button button--primary" type="button" disabled>
+                                Analyze Risk
+                            </button>
+                        </div>
+                    </form>
+
+                    <article class="risk-preview-panel" aria-labelledby="preview-heading">
+                        <div class="preview-heading">
+                            <div>
+                                <p class="preview-kicker">Risk reference</p>
+                                <h3 id="preview-heading">Common clause risk indicators</h3>
+                            </div>
+                            <span class="preview-badge">Review guide</span>
+                        </div>
+
+                        <p class="preview-introduction">
+                            Risk categories pair clear labels with short explanations to help prioritize a manual
+                            review. Apply them only after reading the complete clause and its surrounding terms.
+                        </p>
+
+                        <div class="risk-preview-list">
+                            <article class="risk-preview-item risk-preview-item--high">
+                                <span class="risk-level risk-level--high">High risk</span>
+                                <div>
+                                    <h4>Rights or liability language</h4>
+                                    <p>Terms that may significantly limit options or increase exposure can require close review.</p>
+                                </div>
+                            </article>
+
+                            <article class="risk-preview-item risk-preview-item--medium">
+                                <span class="risk-level risk-level--medium">Medium risk</span>
+                                <div>
+                                    <h4>Cost or timing terms</h4>
+                                    <p>Obligations involving fees, renewal dates, or notice periods may need careful checking.</p>
+                                </div>
+                            </article>
+
+                            <article class="risk-preview-item risk-preview-item--low">
+                                <span class="risk-level risk-level--low">Low risk</span>
+                                <div>
+                                    <h4>Routine contract language</h4>
+                                    <p>Routine provisions may require less immediate attention but should still be read in context.</p>
+                                </div>
+                            </article>
+                        </div>
+
+                        <p class="preview-footnote">
+                            Risk labels can support review prioritization; they do not determine whether a clause is
+                            legal, fair, or suitable for a specific situation.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="risk-guidance-section" aria-labelledby="guidance-heading">
+            <div class="container">
+                <div class="section-heading section-heading--centered">
+                    <p class="eyebrow">Designed for clarity</p>
+                    <h2 id="guidance-heading">A simple clause-level review flow</h2>
+                </div>
+
+                <ol class="guidance-grid">
+                    <li>
+                        <span class="guidance-number">1</span>
+                        <h3>Add your content</h3>
+                        <p>Upload an accepted document or paste the legal clause you want to understand.</p>
+                    </li>
+                    <li>
+                        <span class="guidance-number">2</span>
+                        <h3>Review risk categories</h3>
+                        <p>Use risk labels and plain-language context to identify wording that deserves closer attention.</p>
+                    </li>
+                    <li>
+                        <span class="guidance-number">3</span>
+                        <h3>Decide what needs help</h3>
+                        <p>Use the review as a starting point and consult a qualified lawyer when the stakes matter.</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="risk-disclaimer-section" aria-labelledby="disclaimer-heading">
+            <div class="container">
+                <aside class="risk-disclaimer">
+                    <div class="disclaimer-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M12 11v5M12 8h.01"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 id="disclaimer-heading">Important legal information</h2>
+                        <p>
+                            LegalSimple is intended to assist with understanding legal content, not replace advice
+                            from a qualified lawyer. Risk labels are general indicators and must be checked against
+                            the complete document and applicable law.
+                        </p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-about">
+                <a class="brand brand--footer" href="index.html">Legal<span>Simple</span></a>
+                <p>Making legal documents and everyday legal information easier to understand.</p>
+            </div>
+
+            <nav class="footer-navigation" aria-label="Footer feature navigation">
+                <h2>Features</h2>
+                <ul>
+                    <li><a href="document-simplifier.html">Document Simplifier</a></li>
+                    <li><a href="RiskAnalyzer_LegalSimple.html" aria-current="page">Risk Analyzer</a></li>
+                    <li><a href="document-comparison.html">Compare Documents</a></li>
+                    <li><a href="notice-generator.html">Notice Generator</a></li>
+                    <li><a href="faq.html">Legal FAQ</a></li>
+                </ul>
+            </nav>
+
+            <div class="footer-disclaimer">
+                <h2>Responsible use</h2>
+                <p>LegalSimple supports preliminary review and does not replace qualified legal advice.</p>
+                <a class="footer-home-link" href="index.html">Return to home</a>
+            </div>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>&copy; 2026 LegalSimple</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,508 @@
+/* Risk Analyzer page styles
+   Shared tokens, reset, typography, layout primitives, header, navigation,
+   buttons, footer, focus treatment, and motion preferences live in styles.css. */
+
+.risk-analyzer-page {
+    --risk-panel-radius: 18px;
+}
+
+.risk-analyzer-page form,
+.risk-analyzer-page input,
+.risk-analyzer-page textarea,
+.risk-analyzer-page button {
+    min-width: 0;
+}
+
+.risk-analyzer-page input,
+.risk-analyzer-page textarea,
+.risk-analyzer-page button {
+    font: inherit;
+}
+
+.risk-analyzer-page h4 {
+    margin-top: 0;
+    margin-bottom: var(--space-xs);
+    color: var(--color-navy-900);
+    font-size: 1rem;
+    font-weight: 750;
+    letter-spacing: -0.025em;
+    line-height: 1.18;
+}
+
+.risk-analyzer-page .button:disabled,
+.risk-analyzer-page .button:disabled:hover {
+    border-color: #c5d0da;
+    background: #dfe7ee;
+    color: var(--color-text-muted);
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 1;
+    transform: none;
+}
+
+/* Preserve the Risk Analyzer's subtle hero treatment. */
+.risk-analyzer-page .tool-hero {
+    background:
+        radial-gradient(circle at 88% 22%, rgb(44 110 107 / 9%) 0, rgb(44 110 107 / 0%) 28rem),
+        linear-gradient(180deg, #f9fbfd 0%, var(--color-background) 100%);
+}
+
+/* Analyzer workspace */
+.risk-analyzer-page .risk-workspace-section {
+    padding-block: clamp(3.5rem, 8vw, 6rem);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+}
+
+.risk-analyzer-page .section-heading {
+    max-width: 46rem;
+    margin-bottom: var(--space-2xl);
+}
+
+.risk-analyzer-page .section-heading > p:last-child {
+    margin-bottom: 0;
+    color: var(--color-text-muted);
+}
+
+.risk-analyzer-page .section-heading--centered {
+    margin-inline: auto;
+    text-align: center;
+}
+
+.risk-analyzer-page .risk-workspace {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+}
+
+.risk-analyzer-page .risk-input-panel,
+.risk-analyzer-page .risk-preview-panel {
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid var(--color-border);
+    border-radius: var(--risk-panel-radius);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+}
+
+.risk-analyzer-page .risk-input-panel {
+    display: grid;
+    gap: var(--space-lg);
+}
+
+.risk-analyzer-page .panel-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.risk-analyzer-page .panel-heading p,
+.risk-analyzer-page .preview-heading p {
+    margin: 0;
+}
+
+.risk-analyzer-page .panel-heading > div > p {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+.risk-analyzer-page .panel-step {
+    display: inline-grid;
+    flex: 0 0 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--color-navy-900);
+    color: var(--color-white);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.risk-analyzer-page .risk-field {
+    display: grid;
+    gap: var(--space-xs);
+}
+
+.risk-analyzer-page .risk-field label {
+    color: var(--color-navy-900);
+    font-size: 0.92rem;
+    font-weight: 750;
+}
+
+.risk-analyzer-page .field-help {
+    margin: 0 0 var(--space-xs);
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+.risk-analyzer-page .risk-file-input {
+    display: block;
+    width: 100%;
+    min-height: 54px;
+    padding: 0.35rem;
+    overflow: hidden;
+    border: 1px dashed #9eb1c1;
+    border-radius: var(--radius-control);
+    background: var(--color-background);
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.risk-analyzer-page .risk-file-input::file-selector-button {
+    min-height: 42px;
+    margin-right: var(--space-md);
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-control);
+    background: var(--color-surface);
+    color: var(--color-navy-700);
+    font-weight: 750;
+    cursor: pointer;
+}
+
+.risk-analyzer-page .risk-file-input:hover {
+    border-color: var(--color-teal-700);
+    background: #f2f8f7;
+}
+
+.risk-analyzer-page .risk-file-input:hover::file-selector-button {
+    border-color: var(--color-teal-700);
+}
+
+.risk-analyzer-page .risk-textarea {
+    display: block;
+    width: 100%;
+    min-height: 15rem;
+    padding: var(--space-md);
+    resize: vertical;
+    overflow-wrap: anywhere;
+    border: 1px solid #aebdca;
+    border-radius: var(--radius-control);
+    background: var(--color-background);
+    color: var(--color-text);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background-color var(--transition);
+}
+
+.risk-analyzer-page .risk-textarea::placeholder {
+    color: #6b7b8c;
+    opacity: 1;
+}
+
+.risk-analyzer-page .risk-textarea:hover {
+    border-color: #8499ab;
+}
+
+.risk-analyzer-page .risk-textarea:focus {
+    border-color: var(--color-focus);
+    background: var(--color-surface);
+    box-shadow: 0 0 0 3px rgb(22 122 120 / 14%);
+}
+
+.risk-analyzer-page .input-divider {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.risk-analyzer-page .input-divider::before,
+.risk-analyzer-page .input-divider::after {
+    height: 1px;
+    flex: 1;
+    background: var(--color-border);
+    content: "";
+}
+
+.risk-analyzer-page .risk-form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+/* Risk reference */
+.risk-analyzer-page .risk-preview-panel {
+    border-top: 4px solid var(--color-teal-700);
+}
+
+.risk-analyzer-page .preview-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.risk-analyzer-page .preview-kicker {
+    margin-bottom: var(--space-xs);
+    color: var(--color-teal-700);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.risk-analyzer-page .preview-badge {
+    flex: 0 0 auto;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    background: var(--color-section);
+    color: var(--color-text-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+}
+
+.risk-analyzer-page .preview-introduction {
+    margin-block: var(--space-lg);
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+.risk-analyzer-page .risk-preview-list {
+    display: grid;
+    gap: var(--space-sm);
+}
+
+.risk-analyzer-page .risk-preview-item {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: var(--space-md);
+    align-items: start;
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-left-width: 4px;
+    border-radius: var(--radius-control);
+    background: var(--color-background);
+}
+
+.risk-analyzer-page .risk-preview-item--high {
+    border-left-color: var(--color-high);
+}
+
+.risk-analyzer-page .risk-preview-item--medium {
+    border-left-color: var(--color-medium);
+}
+
+.risk-analyzer-page .risk-preview-item--low {
+    border-left-color: var(--color-low);
+}
+
+.risk-analyzer-page .risk-preview-item p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+.risk-analyzer-page .risk-level {
+    display: inline-flex;
+    min-height: 27px;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.65rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.risk-analyzer-page .risk-level--high {
+    background: var(--color-high-background);
+    color: var(--color-high);
+}
+
+.risk-analyzer-page .risk-level--medium {
+    background: var(--color-medium-background);
+    color: var(--color-medium);
+}
+
+.risk-analyzer-page .risk-level--low {
+    background: var(--color-low-background);
+    color: var(--color-low);
+}
+
+.risk-analyzer-page .preview-footnote {
+    margin: var(--space-lg) 0 0;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 0.78rem;
+    line-height: 1.55;
+}
+
+/* Guidance */
+.risk-analyzer-page .risk-guidance-section {
+    padding-block: clamp(3.5rem, 8vw, 6rem);
+    border-block: 1px solid var(--color-border);
+    background: var(--color-section);
+}
+
+.risk-analyzer-page .guidance-grid {
+    display: grid;
+    gap: var(--space-lg);
+    margin: 0;
+    list-style: none;
+}
+
+.risk-analyzer-page .guidance-grid li {
+    padding: var(--space-xl);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+}
+
+.risk-analyzer-page .guidance-number {
+    display: inline-grid;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: var(--space-lg);
+    place-items: center;
+    border-radius: var(--radius-control);
+    background: var(--color-navy-700);
+    color: var(--color-white);
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.risk-analyzer-page .guidance-grid p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+/* Disclaimer */
+.risk-analyzer-page .risk-disclaimer-section {
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+    background: var(--color-surface);
+}
+
+.risk-analyzer-page .risk-disclaimer {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid #b9d8d6;
+    border-left: 4px solid var(--color-teal-700);
+    border-radius: var(--radius);
+    background: #f0f8f7;
+}
+
+.risk-analyzer-page .disclaimer-icon {
+    display: grid;
+    flex: 0 0 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    border-radius: var(--radius-control);
+    background: var(--color-teal-100);
+}
+
+.risk-analyzer-page .disclaimer-icon svg {
+    width: 1.3rem;
+    fill: none;
+    stroke: var(--color-teal-700);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+}
+
+.risk-analyzer-page .risk-disclaimer h2 {
+    margin-bottom: var(--space-xs);
+    font-size: 1.25rem;
+}
+
+.risk-analyzer-page .risk-disclaimer p {
+    max-width: 60rem;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+/* The shared footer has no standalone class for this existing text link. */
+.risk-analyzer-page .footer-home-link {
+    display: inline-block;
+    margin-top: var(--space-md);
+    color: #dbe6ee;
+    font-size: 0.9rem;
+    font-weight: 750;
+    text-decoration: underline;
+}
+
+.risk-analyzer-page .footer-home-link:hover {
+    color: var(--color-white);
+}
+
+/* Risk Analyzer responsive layout */
+@media (min-width: 48rem) {
+    .risk-analyzer-page .guidance-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 64rem) {
+    .risk-analyzer-page .risk-workspace {
+        grid-template-columns: minmax(0, 1.08fr) minmax(21rem, 0.92fr);
+    }
+}
+
+@media (max-width: 63.99rem) {
+    .risk-analyzer-page .primary-navigation {
+        padding-top: var(--space-sm);
+        border-top: 1px solid var(--color-border);
+    }
+}
+
+@media (max-width: 47.99rem) {
+    .risk-analyzer-page .risk-form-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .risk-analyzer-page .risk-form-footer .button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 34rem) {
+    .risk-analyzer-page .section-heading {
+        margin-bottom: var(--space-xl);
+    }
+
+    .risk-analyzer-page .preview-heading {
+        flex-direction: column;
+    }
+
+    .risk-analyzer-page .risk-preview-item {
+        grid-template-columns: 1fr;
+    }
+
+    .risk-analyzer-page .risk-level {
+        width: fit-content;
+    }
+
+    .risk-analyzer-page .risk-disclaimer {
+        display: grid;
+    }
+}

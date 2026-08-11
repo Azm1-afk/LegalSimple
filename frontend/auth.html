@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="description"
+        content="Review the LegalSimple sign-up and login form requirements."
+    >
+    <title>Sign Up or Login | LegalSimple</title>
+    <link
+        rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23102A43'/%3E%3Cpath d='M20 17h24M25 17v29M20 46h24' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E"
+    >
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+    <script src="auth.js" defer></script>
+</head>
+<body class="auth-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="index.html" aria-label="LegalSimple home">
+                Legal<span>Simple</span>
+            </a>
+
+            <nav class="primary-navigation" aria-label="Primary navigation">
+                <ul class="nav-list">
+                    <li><a class="nav-link" href="index.html">Home</a></li>
+                    <li><a class="nav-link" href="document-simplifier.html">Document Simplifier</a></li>
+                    <li><a class="nav-link" href="RiskAnalyzer_LegalSimple.html">Risk Analyzer</a></li>
+                    <li><a class="nav-link" href="document-comparison.html">Compare Documents</a></li>
+                    <li><a class="nav-link" href="notice-generator.html">Notice Generator</a></li>
+                    <li><a class="nav-link" href="faq.html">Legal FAQ</a></li>
+                    <li>
+                        <a class="nav-link nav-link--button" href="auth.html" aria-current="page">
+                            Sign Up / Login
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="auth-main" id="main-content">
+        <div class="container auth-container">
+            <section class="auth-card" aria-labelledby="auth-heading">
+                <div class="auth-introduction">
+                    <p class="auth-brand" aria-hidden="true">Legal<span>Simple</span></p>
+                    <p class="eyebrow">Your LegalSimple account</p>
+                    <h1 id="auth-heading">Create your LegalSimple account</h1>
+                    <p class="auth-description" id="auth-description">
+                        Enter your email address and review the password requirements.
+                    </p>
+                </div>
+
+                <div class="auth-tabs" role="tablist" aria-label="Choose an account action">
+                    <button
+                        class="auth-tab is-active"
+                        id="signup-tab"
+                        type="button"
+                        role="tab"
+                        aria-selected="true"
+                        aria-controls="signup-panel"
+                        data-auth-mode="signup"
+                    >
+                        Sign Up
+                    </button>
+                    <button
+                        class="auth-tab"
+                        id="login-tab"
+                        type="button"
+                        role="tab"
+                        aria-selected="false"
+                        aria-controls="login-panel"
+                        tabindex="-1"
+                        data-auth-mode="login"
+                    >
+                        Login
+                    </button>
+                </div>
+
+                <div class="auth-panel" id="signup-panel" role="tabpanel" aria-labelledby="signup-tab">
+                    <form class="auth-form" id="signup-form" novalidate>
+                        <div class="auth-field">
+                            <label for="signup-email">Email address</label>
+                            <input
+                                id="signup-email"
+                                name="signup-email"
+                                type="email"
+                                inputmode="email"
+                                autocomplete="email"
+                                aria-describedby="signup-email-error"
+                                required
+                            >
+                            <p class="auth-field-error" id="signup-email-error" hidden></p>
+                        </div>
+
+                        <div class="auth-field">
+                            <label for="signup-password">Password</label>
+                            <div class="auth-password-wrapper">
+                                <input
+                                    id="signup-password"
+                                    name="signup-password"
+                                    type="password"
+                                    autocomplete="new-password"
+                                    aria-describedby="signup-password-requirements signup-password-error"
+                                    required
+                                >
+                                <button
+                                    class="auth-password-toggle"
+                                    type="button"
+                                    aria-label="Show password"
+                                    aria-controls="signup-password"
+                                    aria-pressed="false"
+                                >
+                                    Show
+                                </button>
+                            </div>
+                            <p class="auth-field-error" id="signup-password-error" hidden></p>
+                            <div class="auth-password-requirements" id="signup-password-requirements">
+                                <p>Password requirements:</p>
+                                <ul>
+                                    <li data-password-requirement="length">Not met: At least 8 characters</li>
+                                    <li data-password-requirement="uppercase">Not met: One uppercase letter</li>
+                                    <li data-password-requirement="lowercase">Not met: One lowercase letter</li>
+                                    <li data-password-requirement="number">Not met: One number</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="auth-field">
+                            <label for="signup-confirm-password">Confirm password</label>
+                            <div class="auth-password-wrapper">
+                                <input
+                                    id="signup-confirm-password"
+                                    name="signup-confirm-password"
+                                    type="password"
+                                    autocomplete="new-password"
+                                    aria-describedby="signup-confirm-password-error"
+                                    required
+                                >
+                                <button
+                                    class="auth-password-toggle"
+                                    type="button"
+                                    aria-label="Show password"
+                                    aria-controls="signup-confirm-password"
+                                    aria-pressed="false"
+                                >
+                                    Show
+                                </button>
+                            </div>
+                            <p class="auth-field-error" id="signup-confirm-password-error" hidden></p>
+                        </div>
+
+                        <button class="button button--primary auth-submit" type="submit">Create Account</button>
+
+                        <div class="auth-divider" aria-hidden="true"><span>or</span></div>
+
+                        <button class="auth-google-button" type="button" data-google-signin>
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path fill="#4285f4" d="M21.6 12.23c0-.71-.06-1.4-.18-2.07H12v3.92h5.38a4.6 4.6 0 0 1-2 3.02v2.55h3.24c1.9-1.75 2.98-4.33 2.98-7.42Z"></path>
+                                <path fill="#34a853" d="M12 22c2.7 0 4.98-.9 6.64-2.42l-3.24-2.55c-.9.6-2.05.96-3.4.96-2.61 0-4.82-1.76-5.61-4.13H3.04v2.63A10 10 0 0 0 12 22Z"></path>
+                                <path fill="#fbbc05" d="M6.39 13.86A6 6 0 0 1 6.08 12c0-.65.11-1.28.31-1.86V7.51H3.04A10 10 0 0 0 2 12c0 1.61.38 3.14 1.04 4.49l3.35-2.63Z"></path>
+                                <path fill="#ea4335" d="M12 6.01c1.47 0 2.79.51 3.83 1.5L18.7 4.64A9.65 9.65 0 0 0 12 2a10 10 0 0 0-8.96 5.51l3.35 2.63C7.18 7.77 9.39 6.01 12 6.01Z"></path>
+                            </svg>
+                            <span>Sign in with Google</span>
+                        </button>
+
+                        <p class="auth-status" id="signup-status" role="status" aria-live="polite"></p>
+
+                        <p class="auth-switch-prompt">
+                            Already have an account?
+                            <button type="button" data-auth-switch="login">Login</button>
+                        </p>
+                    </form>
+                </div>
+
+                <div class="auth-panel" id="login-panel" role="tabpanel" aria-labelledby="login-tab" hidden>
+                    <form class="auth-form" id="login-form" novalidate>
+                        <div class="auth-field">
+                            <label for="login-email">Email address</label>
+                            <input
+                                id="login-email"
+                                name="login-email"
+                                type="email"
+                                inputmode="email"
+                                autocomplete="email"
+                                aria-describedby="login-email-error"
+                                required
+                            >
+                            <p class="auth-field-error" id="login-email-error" hidden></p>
+                        </div>
+
+                        <div class="auth-field">
+                            <label for="login-password">Password</label>
+                            <div class="auth-password-wrapper">
+                                <input
+                                    id="login-password"
+                                    name="login-password"
+                                    type="password"
+                                    autocomplete="current-password"
+                                    aria-describedby="login-password-error"
+                                    required
+                                >
+                                <button
+                                    class="auth-password-toggle"
+                                    type="button"
+                                    aria-label="Show password"
+                                    aria-controls="login-password"
+                                    aria-pressed="false"
+                                >
+                                    Show
+                                </button>
+                            </div>
+                            <p class="auth-field-error" id="login-password-error" hidden></p>
+                        </div>
+
+                        <button class="button button--primary auth-submit" type="submit">Login</button>
+
+                        <div class="auth-divider" aria-hidden="true"><span>or</span></div>
+
+                        <button class="auth-google-button" type="button" data-google-signin>
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path fill="#4285f4" d="M21.6 12.23c0-.71-.06-1.4-.18-2.07H12v3.92h5.38a4.6 4.6 0 0 1-2 3.02v2.55h3.24c1.9-1.75 2.98-4.33 2.98-7.42Z"></path>
+                                <path fill="#34a853" d="M12 22c2.7 0 4.98-.9 6.64-2.42l-3.24-2.55c-.9.6-2.05.96-3.4.96-2.61 0-4.82-1.76-5.61-4.13H3.04v2.63A10 10 0 0 0 12 22Z"></path>
+                                <path fill="#fbbc05" d="M6.39 13.86A6 6 0 0 1 6.08 12c0-.65.11-1.28.31-1.86V7.51H3.04A10 10 0 0 0 2 12c0 1.61.38 3.14 1.04 4.49l3.35-2.63Z"></path>
+                                <path fill="#ea4335" d="M12 6.01c1.47 0 2.79.51 3.83 1.5L18.7 4.64A9.65 9.65 0 0 0 12 2a10 10 0 0 0-8.96 5.51l3.35 2.63C7.18 7.77 9.39 6.01 12 6.01Z"></path>
+                            </svg>
+                            <span>Sign in with Google</span>
+                        </button>
+
+                        <p class="auth-status" id="login-status" role="status" aria-live="polite"></p>
+
+                        <p class="auth-switch-prompt">
+                            New to LegalSimple?
+                            <button type="button" data-auth-switch="signup">Sign Up</button>
+                        </p>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-about">
+                <a class="brand brand--footer" href="index.html">Legal<span>Simple</span></a>
+                <p>Making legal documents and everyday legal information easier to understand.</p>
+            </div>
+
+            <nav class="footer-navigation" aria-label="Footer feature navigation">
+                <h2>Features</h2>
+                <ul>
+                    <li><a href="document-simplifier.html">Document Simplifier</a></li>
+                    <li><a href="RiskAnalyzer_LegalSimple.html">Risk Analyzer</a></li>
+                    <li><a href="document-comparison.html">Compare Documents</a></li>
+                    <li><a href="notice-generator.html">Notice Generator</a></li>
+                    <li><a href="faq.html">Legal FAQ</a></li>
+                </ul>
+            </nav>
+
+            <div class="footer-disclaimer">
+                <h2>Responsible use</h2>
+                <p>
+                    LegalSimple supports preliminary review and does not replace advice from a qualified legal
+                    professional.
+                </p>
+            </div>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>&copy; 2026 LegalSimple</p>
+        </div>
+    </footer>
+</body>
+</html>
