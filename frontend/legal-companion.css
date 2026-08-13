@@ -178,6 +178,124 @@
     margin: 0;
 }
 
+.legal-companion__upload {
+    display: inline-flex;
+    width: 2.75rem;
+    min-height: 2.75rem;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-control);
+    background: var(--color-surface);
+    color: var(--color-navy-700);
+    cursor: pointer;
+    transition:
+        background-color var(--transition),
+        border-color var(--transition),
+        color var(--transition);
+}
+
+.legal-companion__upload:hover {
+    border-color: var(--color-teal-700);
+    background: var(--color-teal-100);
+    color: var(--color-navy-900);
+}
+
+.legal-companion__upload svg {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.legal-companion__attachment {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-control);
+    background: var(--color-background);
+    color: var(--color-text);
+}
+
+.legal-companion__attachment[hidden] {
+    display: none;
+}
+
+.legal-companion__attachment[data-state="ready"] {
+    border-color: var(--color-teal-700);
+    background: var(--color-teal-100);
+}
+
+.legal-companion__attachment[data-state="error"] {
+    border-color: var(--color-high);
+    background: var(--color-high-background);
+}
+
+.legal-companion__attachment-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+    flex: 0 0 auto;
+    color: var(--color-teal-700);
+}
+
+.legal-companion__attachment-details {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+}
+
+.legal-companion__attachment-name,
+.legal-companion__attachment-status {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.legal-companion__attachment-name {
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.legal-companion__attachment-status {
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    line-height: 1.35;
+}
+
+.legal-companion__attachment[data-state="error"] .legal-companion__attachment-status {
+    color: var(--color-high);
+}
+
+.legal-companion__attachment-remove {
+    display: inline-flex;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-control);
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+}
+
+.legal-companion__attachment-remove:hover {
+    background: rgb(16 42 67 / 8%);
+    color: var(--color-navy-900);
+}
+
+.legal-companion__attachment-remove svg {
+    width: 1rem;
+    height: 1rem;
+}
+
 .legal-companion__input {
     min-width: 0;
     min-height: 2.75rem;
@@ -227,6 +345,50 @@
     border-color: var(--color-navy-900);
     background: var(--color-navy-900);
     box-shadow: var(--shadow-small);
+}
+
+.legal-companion__upload:disabled,
+.legal-companion__input:disabled,
+.legal-companion__send:disabled,
+.legal-companion__attachment-remove:disabled {
+    cursor: not-allowed;
+    opacity: 0.58;
+}
+
+.legal-companion__message--loading .legal-companion__message-text {
+    color: var(--color-text-muted);
+    animation: legal-companion-pulse 1.4s ease-in-out infinite;
+}
+
+.legal-companion__message--error {
+    border-color: var(--color-high);
+    background: var(--color-high-background);
+}
+
+.legal-companion__sources {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin-top: var(--space-xs);
+    padding-top: var(--space-xs);
+    border-top: 1px solid var(--color-border);
+}
+
+.legal-companion__source {
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    line-height: 1.35;
+}
+
+@keyframes legal-companion-pulse {
+    0%,
+    100% {
+        opacity: 0.55;
+    }
+
+    50% {
+        opacity: 1;
+    }
 }
 
 .legal-companion__disclaimer {
@@ -302,6 +464,10 @@
 @media (prefers-reduced-motion: reduce) {
     .legal-companion__messages {
         scroll-behavior: auto;
+    }
+
+    .legal-companion__message--loading .legal-companion__message-text {
+        animation: none;
     }
 }
 
