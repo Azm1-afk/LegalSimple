@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+backend/.env
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+venv/
+.venv/
+
+temp_files/
+backend/temp_files/
+backend/uploads/
+*.faiss
+*.pkl
