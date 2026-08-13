@@ -1,0 +1,1 @@
+"""LegalSimple FastAPI backend package."""
