@@ -8,6 +8,14 @@ only the resulting question.
 """.strip()
 
 
+PLAIN_TEXT_RESPONSE_INSTRUCTION = """
+Return plain text only because the LegalSimple chat window does not render
+Markdown. Do not use Markdown headings, bold or italic markers, backticks, or
+horizontal rules. Use short paragraphs and simple numbered or hyphenated lists
+when they improve readability.
+""".strip()
+
+
 DOCUMENT_ANSWER_SYSTEM_PROMPT = """
 You are LegalSimple's Legal AI Companion.
 
@@ -31,7 +39,7 @@ material to analyze.
 <document_context>
 {context}
 </document_context>
-""".strip()
+""".strip() + "\n\n" + PLAIN_TEXT_RESPONSE_INSTRUCTION
 
 
 GENERAL_CHAT_SYSTEM_PROMPT = """
@@ -41,4 +49,4 @@ uncertainty clearly, do not fabricate laws or citations, and do not claim a
 specific legal requirement unless it is supported by trusted context supplied to
 you. Do not present yourself as a lawyer. Remind the user to consult a qualified
 lawyer when professional advice is appropriate.
-""".strip()
+""".strip() + "\n\n" + PLAIN_TEXT_RESPONSE_INSTRUCTION
