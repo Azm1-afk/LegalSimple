@@ -2,6 +2,7 @@
 
 import io
 import logging
+import re
 import threading
 from dataclasses import dataclass
 from pathlib import Path
@@ -308,7 +309,9 @@ class RAGService:
         answer = (answer_prompt | llm | StrOutputParser()).invoke(
             {"input": message, "chat_history": history, "context": context}
         )
-        return answer, self._collect_sources(retrieved_documents)
+        return self._prepare_answer_for_display(answer), self._collect_sources(
+            retrieved_documents
+        )
 
     @staticmethod
     def _general_chat(
@@ -323,9 +326,21 @@ class RAGService:
                 ("human", "{input}"),
             ]
         )
-        return (general_prompt | llm | StrOutputParser()).invoke(
+        answer = (general_prompt | llm | StrOutputParser()).invoke(
             {"input": message, "chat_history": history}
         )
+        return RAGService._prepare_answer_for_display(answer)
+
+    @staticmethod
+    def _prepare_answer_for_display(answer: str) -> str:
+        """Remove common Markdown markers that the plain-text chat UI cannot render."""
+        plain_text = re.sub(r"(?m)^\s{0,3}#{1,6}\s+", "", answer)
+        plain_text = re.sub(r"(?m)^\s*[-*_]{3,}\s*$", "", plain_text)
+        plain_text = re.sub(r"(?m)^\s*\*\s+", "- ", plain_text)
+        plain_text = plain_text.replace("**", "").replace("__", "").replace("`", "")
+        plain_text = re.sub(r"(?<!\*)\*([^*\n]+)\*(?!\*)", r"\1", plain_text)
+        plain_text = re.sub(r"\n{3,}", "\n\n", plain_text)
+        return plain_text.strip()
 
     @staticmethod
     def _to_langchain_history(history: list[ChatHistoryMessage]) -> list[BaseMessage]:
