@@ -87,16 +87,11 @@
     function setActiveCategory(category) {
         elements.categoryLinks.forEach(function (link) {
             const isActive = link.dataset.faqCategory === category;
-            const state = link.querySelector('[data-category-state]');
 
             if (isActive) {
                 link.setAttribute('aria-current', 'location');
             } else {
                 link.removeAttribute('aria-current');
-            }
-
-            if (state) {
-                state.hidden = !isActive;
             }
         });
     }
