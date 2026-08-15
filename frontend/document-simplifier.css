@@ -385,6 +385,33 @@
     margin-top: var(--space-lg);
 }
 
+.document-simplifier-page .simplification-output {
+    min-height: 16rem;
+    max-height: 42rem;
+    margin-top: var(--space-lg);
+    padding: clamp(1rem, 3vw, 1.5rem);
+    overflow-y: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 0.96rem;
+    line-height: 1.75;
+    white-space: pre-wrap;
+}
+
+.document-simplifier-page .simplification-output:focus-visible {
+    outline: 3px solid rgba(44, 110, 107, 0.3);
+    outline-offset: 2px;
+}
+
+.document-simplifier-page .simplification-sources {
+    margin: var(--space-sm) 0 0;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+}
+
 .document-simplifier-page .result-card {
     padding: clamp(1.15rem, 3vw, 1.5rem);
     border: 1px solid var(--color-border);
