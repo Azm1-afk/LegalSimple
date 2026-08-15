@@ -245,8 +245,8 @@
 .auth-page .auth-password-requirements li::before {
     position: absolute;
     left: 0;
-    content: "○";
-    color: var(--color-text-muted);
+    content: "✗";
+    color: var(--color-high);
     font-weight: 800;
 }
 

@@ -155,7 +155,6 @@
 
             const isMet = results[requirementName];
             item.classList.toggle('is-met', isMet);
-            item.textContent = (isMet ? 'Met: ' : 'Not met: ') + requirement.label;
         });
     }
 
