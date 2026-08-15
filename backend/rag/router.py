@@ -13,6 +13,7 @@ from backend.rag.schemas import (
     DocumentDeleteResponse,
     DocumentSimplifierResponse,
     DocumentUploadResponse,
+    RiskAnalyzerResponse,
 )
 from backend.rag.service import (
     DocumentProcessingError,
@@ -28,6 +29,7 @@ router = APIRouter(prefix="/api/companion", tags=["Legal AI Companion"])
 document_simplifier_router = APIRouter(
     prefix="/api", tags=["Document Simplifier"]
 )
+risk_analyzer_router = APIRouter(prefix="/api", tags=["Risk Analyzer"])
 rag_service = RAGService()
 
 
@@ -173,5 +175,60 @@ async def simplify_document(
             except UnknownDocumentError:
                 logger.warning(
                     "Simplifier document %s was already removed",
+                    indexed_document.document_id,
+                )
+
+
+@risk_analyzer_router.post(
+    "/risk-analyzer",
+    response_model=RiskAnalyzerResponse,
+)
+async def analyze_document_risk(
+    file: UploadFile = File(...),
+) -> RiskAnalyzerResponse:
+    """Index one PDF, retrieve risk-related content, and classify it with Gemini."""
+    filename, file_bytes = await _read_uploaded_file(file)
+    if Path(filename).suffix.lower() != ".pdf":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Choose a PDF document.",
+        )
+
+    indexed_document: DocumentUploadResponse | None = None
+    try:
+        indexed_document = await run_in_threadpool(
+            rag_service.process_document, filename, file_bytes
+        )
+        analysis, sources = await run_in_threadpool(
+            rag_service.analyze_document_risk, indexed_document.document_id
+        )
+        return RiskAnalyzerResponse(
+            filename=indexed_document.filename,
+            risk_level=analysis.risk_level,
+            explanation=analysis.explanation,
+            chunks=indexed_document.chunks,
+            sources=sources,
+        )
+    except DocumentProcessingError as error:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=str(error)
+        ) from error
+    except RAGConfigurationError as error:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(error)
+        ) from error
+    except GeminiRequestError as error:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY, detail=str(error)
+        ) from error
+    finally:
+        if indexed_document is not None:
+            try:
+                await run_in_threadpool(
+                    rag_service.remove_document, indexed_document.document_id
+                )
+            except UnknownDocumentError:
+                logger.warning(
+                    "Risk Analyzer document %s was already removed",
                     indexed_document.document_id,
                 )
