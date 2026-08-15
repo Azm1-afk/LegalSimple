@@ -1,7 +1,7 @@
 # LegalSimple
 A legal AI based web application with features to help people beat legal technicalities in absence of legal assistance.
 
-## Run the Legal AI Companion locally
+## Run the AI features locally
 
 1. Create and activate a Python virtual environment.
 2. Install the backend dependencies with `pip install -r backend/requirements.txt`.
@@ -9,4 +9,7 @@ A legal AI based web application with features to help people beat legal technic
 4. From the project root, run `uvicorn backend.main:app --reload`.
 5. Open `http://127.0.0.1:8000` in a browser.
 
-FAISS indexes and uploaded-document associations are held only in backend memory and are cleared whenever the FastAPI process restarts.
+The Legal AI Companion and Document Simplifier both use the same Gemini,
+document parsing, chunking, embedding, and FAISS retrieval service. Companion
+indexes remain in backend memory until removed or the process restarts. The
+Document Simplifier removes its temporary index after each request.

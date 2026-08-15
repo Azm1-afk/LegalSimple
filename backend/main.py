@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from backend import config
-from backend.rag.router import router as companion_router
+from backend.rag.router import document_simplifier_router, router as companion_router
 
 
 logging.basicConfig(
@@ -24,6 +24,7 @@ app.add_middleware(
     allow_headers=["Content-Type"],
 )
 app.include_router(companion_router)
+app.include_router(document_simplifier_router)
 
 
 @app.get("/api/health", tags=["Health"])
