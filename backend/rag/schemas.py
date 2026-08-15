@@ -52,3 +52,12 @@ class DocumentDeleteResponse(BaseModel):
 
     status: Literal["removed"]
     document_id: str
+
+
+class DocumentSimplifierResponse(BaseModel):
+    """A plain-language explanation generated from retrieved PDF content."""
+
+    filename: str
+    simplification: str
+    chunks: int = Field(ge=1)
+    sources: list[DocumentSource] = Field(default_factory=list)

@@ -1,4 +1,4 @@
-"""Gemini and FAISS retrieval service for the Legal AI Companion."""
+"""Shared Gemini and FAISS document retrieval services for LegalSimple."""
 
 import io
 import logging
@@ -21,6 +21,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from backend import config
 from backend.rag.prompts import (
     DOCUMENT_ANSWER_SYSTEM_PROMPT,
+    DOCUMENT_SIMPLIFIER_RETRIEVAL_QUERY,
+    DOCUMENT_SIMPLIFIER_SYSTEM_PROMPT,
     GENERAL_CHAT_SYSTEM_PROMPT,
     QUESTION_REWRITE_SYSTEM_PROMPT,
 )
@@ -61,7 +63,7 @@ class DocumentStore:
 
 
 class RAGService:
-    """Parse documents, manage per-document FAISS stores, and answer questions."""
+    """Parse, index, retrieve, and generate answers from uploaded documents."""
 
     def __init__(self) -> None:
         self._llm: ChatGoogleGenerativeAI | None = None
@@ -165,6 +167,56 @@ class RAGService:
             raise GeminiRequestError(
                 "The Legal AI Companion could not generate a response."
             ) from error
+
+    def simplify_document(
+        self, document_id: str
+    ) -> tuple[str, list[DocumentSource]]:
+        """Generate a plain-language guide from broadly retrieved document chunks."""
+        llm, _ = self._ensure_models()
+
+        try:
+            document_store = self._get_document_store(document_id)
+            retrieved_documents = self._retrieve_documents(
+                document_id,
+                DOCUMENT_SIMPLIFIER_RETRIEVAL_QUERY,
+                config.SIMPLIFIER_RETRIEVAL_COUNT,
+            )
+            # Similarity search returns relevance order. Restoring source order makes
+            # connected clauses and exceptions easier for Gemini to interpret.
+            retrieved_documents.sort(
+                key=lambda document: document.metadata.get("chunk_index", 0)
+            )
+            context = self._format_context(retrieved_documents)
+            simplifier_prompt = ChatPromptTemplate.from_messages(
+                [
+                    ("system", DOCUMENT_SIMPLIFIER_SYSTEM_PROMPT),
+                    ("human", "Create a plain-language explanation of this document."),
+                ]
+            )
+            if len(retrieved_documents) == document_store.chunk_count:
+                retrieval_coverage = "All document chunks were retrieved."
+            else:
+                retrieval_coverage = (
+                    f"{len(retrieved_documents)} of {document_store.chunk_count} "
+                    "document chunks were retrieved by relevance."
+                )
+            simplification = (simplifier_prompt | llm | StrOutputParser()).invoke(
+                {
+                    "context": context,
+                    "retrieval_coverage": retrieval_coverage,
+                }
+            )
+        except UnknownDocumentError:
+            raise
+        except Exception as error:
+            logger.exception("Gemini document simplification failed")
+            raise GeminiRequestError(
+                "The document could not be simplified by the AI service."
+            ) from error
+
+        return self._prepare_answer_for_display(
+            simplification
+        ), self._collect_sources(retrieved_documents)
 
     def _ensure_models(
         self,
@@ -274,11 +326,6 @@ class RAGService:
         history: list[BaseMessage],
         llm: ChatGoogleGenerativeAI,
     ) -> tuple[str, list[DocumentSource]]:
-        with self._stores_lock:
-            document_store = self._document_stores.get(document_id)
-        if document_store is None:
-            raise UnknownDocumentError("The attached document is no longer available.")
-
         retrieval_query = message
         if history:
             rewrite_prompt = ChatPromptTemplate.from_messages(
@@ -293,10 +340,9 @@ class RAGService:
             )
             retrieval_query = rewritten_question.strip() or message
 
-        retriever = document_store.vector_store.as_retriever(
-            search_kwargs={"k": config.RETRIEVAL_COUNT}
+        retrieved_documents = self._retrieve_documents(
+            document_id, retrieval_query, config.RETRIEVAL_COUNT
         )
-        retrieved_documents = retriever.invoke(retrieval_query)
         context = self._format_context(retrieved_documents)
 
         answer_prompt = ChatPromptTemplate.from_messages(
@@ -330,6 +376,24 @@ class RAGService:
             {"input": message, "chat_history": history}
         )
         return RAGService._prepare_answer_for_display(answer)
+
+    def _retrieve_documents(
+        self, document_id: str, retrieval_query: str, retrieval_count: int
+    ) -> list[Document]:
+        """Retrieve relevant chunks from one uploaded document's FAISS store."""
+        document_store = self._get_document_store(document_id)
+        retriever = document_store.vector_store.as_retriever(
+            search_kwargs={"k": min(retrieval_count, document_store.chunk_count)}
+        )
+        return retriever.invoke(retrieval_query)
+
+    def _get_document_store(self, document_id: str) -> DocumentStore:
+        """Return one in-memory document store or raise a consistent error."""
+        with self._stores_lock:
+            document_store = self._document_stores.get(document_id)
+        if document_store is None:
+            raise UnknownDocumentError("The attached document is no longer available.")
+        return document_store
 
     @staticmethod
     def _prepare_answer_for_display(answer: str) -> str:
