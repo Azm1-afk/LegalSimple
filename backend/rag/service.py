@@ -25,16 +25,22 @@ from backend.rag.prompts import (
     DOCUMENT_SIMPLIFIER_SYSTEM_PROMPT,
     GENERAL_CHAT_SYSTEM_PROMPT,
     QUESTION_REWRITE_SYSTEM_PROMPT,
+    RISK_ANALYZER_RETRIEVAL_QUERY,
+    RISK_ANALYZER_SYSTEM_PROMPT,
 )
 from backend.rag.schemas import (
     ChatHistoryMessage,
     DocumentSource,
     DocumentUploadResponse,
+    GeneratedRiskAnalysis,
 )
 
 
 logger = logging.getLogger(__name__)
 SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt"}
+RISK_ANALYSIS_DISCLAIMER = (
+    "This risk analysis is informational and is not legal advice."
+)
 
 
 class RAGConfigurationError(RuntimeError):
@@ -217,6 +223,66 @@ class RAGService:
         return self._prepare_answer_for_display(
             simplification
         ), self._collect_sources(retrieved_documents)
+
+    def analyze_document_risk(
+        self, document_id: str
+    ) -> tuple[GeneratedRiskAnalysis, list[DocumentSource]]:
+        """Classify apparent risk using relevant chunks from one indexed document."""
+        llm, _ = self._ensure_models()
+
+        try:
+            document_store = self._get_document_store(document_id)
+            retrieved_documents = self._retrieve_documents(
+                document_id,
+                RISK_ANALYZER_RETRIEVAL_QUERY,
+                config.RISK_ANALYZER_RETRIEVAL_COUNT,
+            )
+            # Source order helps Gemini interpret clauses together with nearby
+            # qualifications and exceptions.
+            retrieved_documents.sort(
+                key=lambda document: document.metadata.get("chunk_index", 0)
+            )
+            context = self._format_context(retrieved_documents)
+            if len(retrieved_documents) == document_store.chunk_count:
+                retrieval_coverage = "All document chunks were retrieved."
+            else:
+                retrieval_coverage = (
+                    f"{len(retrieved_documents)} of {document_store.chunk_count} "
+                    "document chunks were retrieved by relevance."
+                )
+
+            risk_prompt = ChatPromptTemplate.from_messages(
+                [
+                    ("system", RISK_ANALYZER_SYSTEM_PROMPT),
+                    ("human", "Assess the overall apparent risk of this document."),
+                ]
+            )
+            structured_llm = llm.with_structured_output(
+                GeneratedRiskAnalysis,
+                method="json_schema",
+            )
+            analysis = (risk_prompt | structured_llm).invoke(
+                {
+                    "context": context,
+                    "retrieval_coverage": retrieval_coverage,
+                }
+            )
+            if not isinstance(analysis, GeneratedRiskAnalysis):
+                raise TypeError("Gemini returned an unexpected risk analysis format.")
+
+            explanation = self._prepare_answer_for_display(analysis.explanation)
+            if RISK_ANALYSIS_DISCLAIMER.lower() not in explanation.lower():
+                explanation = f"{explanation}\n\n{RISK_ANALYSIS_DISCLAIMER}"
+            analysis = analysis.model_copy(update={"explanation": explanation})
+        except UnknownDocumentError:
+            raise
+        except Exception as error:
+            logger.exception("Gemini document risk analysis failed")
+            raise GeminiRequestError(
+                "The document could not be analyzed by the AI service."
+            ) from error
+
+        return analysis, self._collect_sources(retrieved_documents)
 
     def _ensure_models(
         self,
