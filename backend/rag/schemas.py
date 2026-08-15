@@ -1,4 +1,4 @@
-"""Request and response schemas for the Legal AI Companion API."""
+"""Request and response schemas for LegalSimple's shared RAG API."""
 
 from typing import Literal
 
@@ -59,5 +59,30 @@ class DocumentSimplifierResponse(BaseModel):
 
     filename: str
     simplification: str
+    chunks: int = Field(ge=1)
+    sources: list[DocumentSource] = Field(default_factory=list)
+
+
+class GeneratedRiskAnalysis(BaseModel):
+    """Structured risk classification returned internally by Gemini."""
+
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    risk_level: Literal["high", "medium", "low"] = Field(
+        description="The document's overall apparent risk level."
+    )
+    explanation: str = Field(
+        min_length=1,
+        max_length=20_000,
+        description="Document-grounded reasons for the selected risk level.",
+    )
+
+
+class RiskAnalyzerResponse(BaseModel):
+    """A document-grounded risk classification for an uploaded PDF."""
+
+    filename: str
+    risk_level: Literal["high", "medium", "low"]
+    explanation: str
     chunks: int = Field(ge=1)
     sources: list[DocumentSource] = Field(default_factory=list)
