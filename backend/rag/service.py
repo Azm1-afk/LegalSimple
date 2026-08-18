@@ -4,7 +4,9 @@ import io
 import logging
 import re
 import threading
+from collections import Counter
 from dataclasses import dataclass
+from difflib import SequenceMatcher
 from pathlib import Path
 from uuid import uuid4
 
@@ -21,6 +23,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from backend import config
 from backend.rag.prompts import (
     DOCUMENT_ANSWER_SYSTEM_PROMPT,
+    DOCUMENT_COMPARISON_SYSTEM_PROMPT,
     DOCUMENT_SIMPLIFIER_RETRIEVAL_QUERY,
     DOCUMENT_SIMPLIFIER_SYSTEM_PROMPT,
     GENERAL_CHAT_SYSTEM_PROMPT,
@@ -30,8 +33,12 @@ from backend.rag.prompts import (
 )
 from backend.rag.schemas import (
     ChatHistoryMessage,
+    ComparisonSource,
+    DocumentComparisonItem,
+    DocumentComparisonSummary,
     DocumentSource,
     DocumentUploadResponse,
+    GeneratedDocumentComparison,
     GeneratedRiskAnalysis,
 )
 
@@ -40,6 +47,38 @@ logger = logging.getLogger(__name__)
 SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt"}
 RISK_ANALYSIS_DISCLAIMER = (
     "This risk analysis is informational and is not legal advice."
+)
+COMPARISON_DISCLAIMER = (
+    "This comparison is informational and is not legal advice. "
+    "The original documents remain authoritative."
+)
+IMPORTANT_VALUE_PATTERN = re.compile(
+    r"(?:\b(?:BDT|USD|EUR|GBP|Tk)\.?\s*[\d,]+(?:\.\d+)?\b|"
+    r"[$€£৳]\s*[\d,]+(?:\.\d+)?|"
+    r"\b\d+(?:\.\d+)?\s*%|"
+    r"\b\d{1,4}[/-]\d{1,2}[/-]\d{1,4}\b|"
+    r"\b(?:January|February|March|April|May|June|July|August|September|"
+    r"October|November|December)\s+\d{1,2}(?:st|nd|rd|th)?(?:,\s*\d{4})?\b|"
+    r"\b\d+(?:\.\d+)?\s+(?:business\s+)?(?:days?|weeks?|months?|years?|hours?)\b|"
+    r"\b\d[\d,]*(?:\.\d+)?\b)",
+    flags=re.IGNORECASE,
+)
+IMPORTANT_LEGAL_TERMS = (
+    "amount",
+    "payment",
+    "fee",
+    "penalty",
+    "interest",
+    "deadline",
+    "notice",
+    "terminate",
+    "termination",
+    "renewal",
+    "default",
+    "liability",
+    "indemn",
+    "obligation",
+    "right",
 )
 
 
@@ -65,7 +104,23 @@ class DocumentStore:
 
     filename: str
     chunk_count: int
+    chunks: tuple[Document, ...]
     vector_store: FAISS
+
+
+@dataclass(frozen=True)
+class ComparisonCandidate:
+    """One deterministic cross-document match prepared for Gemini."""
+
+    comparison_id: str
+    change_type: str
+    original: Document | None
+    revised: Document | None
+    text_similarity: float
+    semantic_distance: float | None
+    original_only_values: tuple[str, ...]
+    revised_only_values: tuple[str, ...]
+    priority: float
 
 
 class RAGService:
@@ -83,7 +138,12 @@ class RAGService:
             length_function=len,
         )
 
-    def process_document(self, filename: str, file_bytes: bytes) -> DocumentUploadResponse:
+    def process_document(
+        self,
+        filename: str,
+        file_bytes: bytes,
+        document_label: str | None = None,
+    ) -> DocumentUploadResponse:
         """Parse and index one supported document in an isolated FAISS store."""
         safe_filename = Path(filename).name.strip()
         extension = Path(safe_filename).suffix.lower()
@@ -110,6 +170,8 @@ class RAGService:
 
         for chunk_index, chunk in enumerate(chunks):
             chunk.metadata["chunk_index"] = chunk_index
+            if document_label:
+                chunk.metadata["document_label"] = document_label
 
         _, embeddings = self._ensure_models()
         try:
@@ -127,6 +189,7 @@ class RAGService:
             self._document_stores[document_id] = DocumentStore(
                 filename=safe_filename,
                 chunk_count=len(chunks),
+                chunks=tuple(chunks),
                 vector_store=vector_store,
             )
 
@@ -283,6 +346,513 @@ class RAGService:
             ) from error
 
         return analysis, self._collect_sources(retrieved_documents)
+
+    def compare_documents(
+        self,
+        original_document_id: str,
+        revised_document_id: str,
+    ) -> tuple[
+        str,
+        DocumentComparisonSummary,
+        list[DocumentComparisonItem],
+        str,
+        str,
+    ]:
+        """Cross-match two indexed PDFs and explain their supported differences."""
+        llm, _ = self._ensure_models()
+
+        try:
+            original_store = self._get_document_store(original_document_id)
+            revised_store = self._get_document_store(revised_document_id)
+
+            # Match with existing FAISS vectors before asking Gemini to explain results.
+            all_candidates = self._create_comparison_candidates(
+                original_store, revised_store
+            )
+            selected_candidates = self._select_comparison_candidates(all_candidates)
+            coverage_note = self._comparison_coverage_note(
+                len(selected_candidates), len(all_candidates)
+            )
+            comparison_context = self._format_comparison_context(selected_candidates)
+
+            comparison_prompt = ChatPromptTemplate.from_messages(
+                [
+                    ("system", DOCUMENT_COMPARISON_SYSTEM_PROMPT),
+                    (
+                        "human",
+                        "Explain the prepared document comparison candidates in the "
+                        "required structured format.",
+                    ),
+                ]
+            )
+            structured_llm = llm.with_structured_output(
+                GeneratedDocumentComparison,
+                method="json_schema",
+            )
+            generated_comparison = (comparison_prompt | structured_llm).invoke(
+                {
+                    "candidate_count": len(selected_candidates),
+                    "coverage_note": coverage_note,
+                    "comparison_context": comparison_context,
+                }
+            )
+            if not isinstance(generated_comparison, GeneratedDocumentComparison):
+                raise TypeError("Gemini returned an unexpected comparison format.")
+
+            generated_items = {
+                item.comparison_id: item for item in generated_comparison.items
+            }
+            expected_ids = {
+                candidate.comparison_id for candidate in selected_candidates
+            }
+            if (
+                len(generated_items) != len(generated_comparison.items)
+                or set(generated_items) != expected_ids
+            ):
+                raise TypeError(
+                    "Gemini did not return every prepared comparison candidate exactly once."
+                )
+
+            comparison_items: list[DocumentComparisonItem] = []
+            for candidate in selected_candidates:
+                generated_item = generated_items[candidate.comparison_id]
+
+                # Source text and page metadata come from parsed chunks, not Gemini.
+                comparison_items.append(
+                    DocumentComparisonItem(
+                        comparison_id=candidate.comparison_id,
+                        section_title=self._prepare_answer_for_display(
+                            generated_item.section_title
+                        ),
+                        change_type=candidate.change_type,
+                        original_text=(
+                            candidate.original.page_content.strip()
+                            if candidate.original is not None
+                            else None
+                        ),
+                        revised_text=(
+                            candidate.revised.page_content.strip()
+                            if candidate.revised is not None
+                            else None
+                        ),
+                        explanation=self._prepare_answer_for_display(
+                            generated_item.explanation
+                        ),
+                        potential_significance=self._prepare_answer_for_display(
+                            generated_item.potential_significance
+                        ),
+                        important=(
+                            generated_item.important
+                            if candidate.change_type != "unchanged"
+                            else False
+                        ),
+                        original_source=self._comparison_source(
+                            candidate.original, "A"
+                        ),
+                        revised_source=self._comparison_source(
+                            candidate.revised, "B"
+                        ),
+                    )
+                )
+
+            summary = self._summarize_comparison_items(comparison_items)
+            overall_summary = self._prepare_answer_for_display(
+                generated_comparison.overall_summary
+            )
+        except UnknownDocumentError:
+            raise
+        except Exception as error:
+            logger.exception("Gemini document comparison failed")
+            raise GeminiRequestError(
+                "The documents could not be compared by the AI service."
+            ) from error
+
+        return (
+            overall_summary,
+            summary,
+            comparison_items,
+            coverage_note,
+            COMPARISON_DISCLAIMER,
+        )
+
+    def _create_comparison_candidates(
+        self,
+        original_store: DocumentStore,
+        revised_store: DocumentStore,
+    ) -> list[ComparisonCandidate]:
+        """Match chunks in both directions, then retain unmatched additions/removals."""
+        cross_edges: dict[tuple[int, int], dict[str, object]] = {}
+        self._add_cross_document_edges(
+            original_store,
+            revised_store,
+            cross_edges,
+            direction="A_to_B",
+        )
+        self._add_cross_document_edges(
+            revised_store,
+            original_store,
+            cross_edges,
+            direction="B_to_A",
+        )
+
+        ranked_edges: list[tuple[bool, float, float, int, int]] = []
+        for (original_index, revised_index), edge in cross_edges.items():
+            original_text = original_store.chunks[original_index].page_content
+            revised_text = revised_store.chunks[revised_index].page_content
+            text_similarity = self._text_similarity(original_text, revised_text)
+            semantic_distance = float(edge["distance"])
+            directions = edge["directions"]
+            is_mutual = isinstance(directions, set) and len(directions) == 2
+
+            should_match = (
+                text_similarity == 1.0
+                or semantic_distance <= config.COMPARISON_MAX_DISTANCE
+                or (
+                    is_mutual
+                    and semantic_distance <= config.COMPARISON_MUTUAL_MAX_DISTANCE
+                )
+                or text_similarity >= config.COMPARISON_MIN_TEXT_SIMILARITY
+            )
+            if should_match:
+                # Exact or strongly overlapping text wins before semantic distance.
+                match_rank = semantic_distance - (0.20 * text_similarity)
+                ranked_edges.append(
+                    (
+                        text_similarity == 1.0,
+                        match_rank,
+                        text_similarity,
+                        original_index,
+                        revised_index,
+                    )
+                )
+
+        ranked_edges.sort(
+            key=lambda edge: (
+                not edge[0],
+                edge[1],
+                -edge[2],
+                edge[3],
+                edge[4],
+            )
+        )
+        matched_original: set[int] = set()
+        matched_revised: set[int] = set()
+        matches: list[tuple[int, int, float, float]] = []
+        for _, _, text_similarity, original_index, revised_index in ranked_edges:
+            if (
+                original_index in matched_original
+                or revised_index in matched_revised
+            ):
+                continue
+            matched_original.add(original_index)
+            matched_revised.add(revised_index)
+            semantic_distance = float(
+                cross_edges[(original_index, revised_index)]["distance"]
+            )
+            matches.append(
+                (
+                    original_index,
+                    revised_index,
+                    text_similarity,
+                    semantic_distance,
+                )
+            )
+
+        candidates: list[ComparisonCandidate] = []
+        next_id = 1
+        for original_index, revised_index, text_similarity, distance in sorted(matches):
+            original = original_store.chunks[original_index]
+            revised = revised_store.chunks[revised_index]
+            change_type = (
+                "unchanged"
+                if self._normalize_comparison_text(original.page_content)
+                == self._normalize_comparison_text(revised.page_content)
+                else "modified"
+            )
+            candidates.append(
+                self._make_comparison_candidate(
+                    next_id,
+                    change_type,
+                    original,
+                    revised,
+                    text_similarity,
+                    distance,
+                )
+            )
+            next_id += 1
+
+        for original_index, original in enumerate(original_store.chunks):
+            if original_index in matched_original:
+                continue
+            candidates.append(
+                self._make_comparison_candidate(
+                    next_id, "removed", original, None, 0.0, None
+                )
+            )
+            next_id += 1
+
+        for revised_index, revised in enumerate(revised_store.chunks):
+            if revised_index in matched_revised:
+                continue
+            candidates.append(
+                self._make_comparison_candidate(
+                    next_id, "added", None, revised, 0.0, None
+                )
+            )
+            next_id += 1
+
+        return candidates
+
+    @staticmethod
+    def _add_cross_document_edges(
+        source_store: DocumentStore,
+        target_store: DocumentStore,
+        edges: dict[tuple[int, int], dict[str, object]],
+        direction: str,
+    ) -> None:
+        """Search every source vector against the other document's FAISS index."""
+        retrieval_count = min(
+            config.COMPARISON_MATCH_COUNT, target_store.chunk_count
+        )
+        for source_index in range(source_store.chunk_count):
+            source_vector = source_store.vector_store.index.reconstruct(source_index)
+            matches = target_store.vector_store.similarity_search_with_score_by_vector(
+                source_vector.tolist(),
+                k=retrieval_count,
+            )
+            for matched_document, raw_distance in matches:
+                target_index = matched_document.metadata.get("chunk_index")
+                if not isinstance(target_index, int):
+                    continue
+                if direction == "A_to_B":
+                    edge_key = (source_index, target_index)
+                else:
+                    edge_key = (target_index, source_index)
+
+                edge = edges.setdefault(
+                    edge_key,
+                    {"distance": float(raw_distance), "directions": set()},
+                )
+                edge["distance"] = min(
+                    float(edge["distance"]), float(raw_distance)
+                )
+                directions = edge["directions"]
+                if isinstance(directions, set):
+                    directions.add(direction)
+
+    def _make_comparison_candidate(
+        self,
+        candidate_number: int,
+        change_type: str,
+        original: Document | None,
+        revised: Document | None,
+        text_similarity: float,
+        semantic_distance: float | None,
+    ) -> ComparisonCandidate:
+        original_text = original.page_content if original is not None else ""
+        revised_text = revised.page_content if revised is not None else ""
+        original_values, revised_values = self._different_significant_values(
+            original_text, revised_text
+        )
+        combined_text = f"{original_text}\n{revised_text}".casefold()
+        important_term_count = sum(
+            term in combined_text for term in IMPORTANT_LEGAL_TERMS
+        )
+        priority = {
+            "added": 80.0,
+            "removed": 80.0,
+            "modified": 60.0,
+            "unchanged": 0.0,
+        }[change_type]
+        if original_values or revised_values:
+            priority += 30.0
+        priority += min(important_term_count * 2.0, 16.0)
+        if change_type == "modified":
+            priority += (1.0 - text_similarity) * 10.0
+
+        return ComparisonCandidate(
+            comparison_id=f"comparison-{candidate_number}",
+            change_type=change_type,
+            original=original,
+            revised=revised,
+            text_similarity=text_similarity,
+            semantic_distance=semantic_distance,
+            original_only_values=original_values,
+            revised_only_values=revised_values,
+            priority=priority,
+        )
+
+    @staticmethod
+    def _select_comparison_candidates(
+        candidates: list[ComparisonCandidate],
+    ) -> list[ComparisonCandidate]:
+        changed_candidates = sorted(
+            (
+                candidate
+                for candidate in candidates
+                if candidate.change_type != "unchanged"
+            ),
+            key=lambda candidate: (-candidate.priority, candidate.comparison_id),
+        )
+        selected = changed_candidates[: config.COMPARISON_MAX_ITEMS]
+        remaining_capacity = config.COMPARISON_MAX_ITEMS - len(selected)
+        if remaining_capacity > 0:
+            # A few unchanged matches help confirm that corresponding text was found.
+            unchanged_candidates = [
+                candidate
+                for candidate in candidates
+                if candidate.change_type == "unchanged"
+            ]
+            selected.extend(
+                unchanged_candidates[
+                    : min(config.COMPARISON_UNCHANGED_ITEMS, remaining_capacity)
+                ]
+            )
+        return selected
+
+    @staticmethod
+    def _normalize_comparison_text(text: str) -> str:
+        return re.sub(r"\s+", " ", text).strip().casefold()
+
+    @classmethod
+    def _text_similarity(cls, original_text: str, revised_text: str) -> float:
+        original_normalized = cls._normalize_comparison_text(original_text)
+        revised_normalized = cls._normalize_comparison_text(revised_text)
+        return SequenceMatcher(
+            None, original_normalized, revised_normalized, autojunk=False
+        ).ratio()
+
+    @staticmethod
+    def _different_significant_values(
+        original_text: str, revised_text: str
+    ) -> tuple[tuple[str, ...], tuple[str, ...]]:
+        # Literal checks keep small changes such as 30 days to 60 days visible.
+        original_values = IMPORTANT_VALUE_PATTERN.findall(original_text)
+        revised_values = IMPORTANT_VALUE_PATTERN.findall(revised_text)
+        original_remaining = Counter(value.casefold() for value in original_values)
+        revised_remaining = Counter(value.casefold() for value in revised_values)
+        shared_values = original_remaining & revised_remaining
+        original_remaining -= shared_values
+        revised_remaining -= shared_values
+
+        def collect_remaining_values(
+            values: list[str], remaining_counts: Counter[str]
+        ) -> tuple[str, ...]:
+            remaining_values: list[str] = []
+            for value in values:
+                normalized_value = value.casefold()
+                if remaining_counts[normalized_value] <= 0:
+                    continue
+                remaining_values.append(value)
+                remaining_counts[normalized_value] -= 1
+            return tuple(remaining_values)
+
+        original_only = collect_remaining_values(
+            original_values, original_remaining
+        )
+        revised_only = collect_remaining_values(revised_values, revised_remaining)
+        return original_only, revised_only
+
+    @staticmethod
+    def _format_comparison_context(
+        candidates: list[ComparisonCandidate],
+    ) -> str:
+        formatted_candidates: list[str] = []
+        for candidate in candidates:
+            original_label = RAGService._comparison_document_label(
+                candidate.original, "Document A"
+            )
+            revised_label = RAGService._comparison_document_label(
+                candidate.revised, "Document B"
+            )
+            original_text = (
+                candidate.original.page_content.strip()
+                if candidate.original is not None
+                else "[No corresponding passage in Document A]"
+            )
+            revised_text = (
+                candidate.revised.page_content.strip()
+                if candidate.revised is not None
+                else "[No corresponding passage in Document B]"
+            )
+            original_values = ", ".join(candidate.original_only_values) or "none"
+            revised_values = ", ".join(candidate.revised_only_values) or "none"
+            semantic_note = (
+                f"{candidate.semantic_distance:.4f} (lower means closer)"
+                if candidate.semantic_distance is not None
+                else "not applicable because one side is unmatched"
+            )
+            formatted_candidates.append(
+                f'<comparison_candidate id="{candidate.comparison_id}" '
+                f'preliminary_change_type="{candidate.change_type}">\n'
+                f"Original source: {original_label}\n"
+                f"BEGIN ORIGINAL EXCERPT\n{original_text}\nEND ORIGINAL EXCERPT\n"
+                f"Revised source: {revised_label}\n"
+                f"BEGIN REVISED EXCERPT\n{revised_text}\nEND REVISED EXCERPT\n"
+                "DETERMINISTIC TEXT CHECK\n"
+                f"Normalized text similarity: {candidate.text_similarity:.4f}\n"
+                f"Semantic distance: {semantic_note}\n"
+                f"Literal values only in original: {original_values}\n"
+                f"Literal values only in revised: {revised_values}\n"
+                "END DETERMINISTIC TEXT CHECK\n"
+                "</comparison_candidate>"
+            )
+        return "\n\n".join(formatted_candidates)
+
+    @staticmethod
+    def _comparison_document_label(
+        document: Document | None, default_label: str
+    ) -> str:
+        if document is None:
+            return f"{default_label}, no source passage"
+        filename = document.metadata.get("filename", "Uploaded PDF")
+        page_number = document.metadata.get("page_number")
+        label = f"{default_label}: {filename}"
+        if isinstance(page_number, int):
+            label += f", page {page_number}"
+        return label
+
+    @staticmethod
+    def _comparison_source(
+        document: Document | None, document_label: str
+    ) -> ComparisonSource | None:
+        if document is None:
+            return None
+        filename = document.metadata.get("filename")
+        if not isinstance(filename, str) or not filename:
+            return None
+        page_number = document.metadata.get("page_number")
+        if not isinstance(page_number, int):
+            page_number = None
+        return ComparisonSource(
+            document_label=document_label,
+            filename=filename,
+            page_number=page_number,
+        )
+
+    @staticmethod
+    def _summarize_comparison_items(
+        items: list[DocumentComparisonItem],
+    ) -> DocumentComparisonSummary:
+        counts = Counter(item.change_type for item in items)
+        return DocumentComparisonSummary(
+            modifications=counts["modified"],
+            additions=counts["added"],
+            removals=counts["removed"],
+            unchanged=counts["unchanged"],
+        )
+
+    @staticmethod
+    def _comparison_coverage_note(selected_count: int, total_count: int) -> str:
+        if selected_count == total_count:
+            return (
+                f"All {total_count} chunk-level comparison candidates were included."
+            )
+        return (
+            f"Showing {selected_count} of {total_count} chunk-level comparison "
+            "candidates, prioritized for additions, removals, changed literal "
+            "values, and legally significant wording."
+        )
 
     def _ensure_models(
         self,
