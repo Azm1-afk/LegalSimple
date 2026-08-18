@@ -9,8 +9,8 @@ A legal AI based web application with features to help people beat legal technic
 4. From the project root, run `uvicorn backend.main:app --reload`.
 5. Open `http://127.0.0.1:8000` in a browser.
 
-The Legal AI Companion, Document Simplifier, and Risk Analyzer use the same
-Gemini, document parsing, chunking, embedding, and FAISS retrieval service.
-Companion indexes remain in backend memory until removed or the process
-restarts. The Document Simplifier and Risk Analyzer remove their temporary
-indexes after each request.
+The Legal AI Companion, Document Simplifier, Risk Analyzer, and Document
+Comparison use the same Gemini, document parsing, chunking, embedding, and FAISS
+retrieval service. Companion indexes remain in backend memory until removed or
+the process restarts. The Document Simplifier, Risk Analyzer, and Document
+Comparison remove their temporary indexes after each request.

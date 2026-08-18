@@ -10,6 +10,7 @@ from backend import config
 from backend.rag.schemas import (
     CompanionChatRequest,
     CompanionChatResponse,
+    DocumentComparisonResponse,
     DocumentDeleteResponse,
     DocumentSimplifierResponse,
     DocumentUploadResponse,
@@ -30,6 +31,7 @@ document_simplifier_router = APIRouter(
     prefix="/api", tags=["Document Simplifier"]
 )
 risk_analyzer_router = APIRouter(prefix="/api", tags=["Risk Analyzer"])
+document_comparison_router = APIRouter(prefix="/api", tags=["Document Comparison"])
 rag_service = RAGService()
 
 
@@ -230,5 +232,100 @@ async def analyze_document_risk(
             except UnknownDocumentError:
                 logger.warning(
                     "Risk Analyzer document %s was already removed",
+                    indexed_document.document_id,
+                )
+
+
+@document_comparison_router.post(
+    "/document-comparison",
+    response_model=DocumentComparisonResponse,
+    response_model_exclude_none=True,
+)
+async def compare_documents(
+    original_file: UploadFile = File(...),
+    revised_file: UploadFile = File(...),
+) -> DocumentComparisonResponse:
+    """Index two PDFs, cross-match their chunks, and explain supported changes."""
+    original_filename, original_bytes = await _read_uploaded_file(original_file)
+    revised_filename, revised_bytes = await _read_uploaded_file(revised_file)
+
+    if Path(original_filename).suffix.lower() != ".pdf":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Document A must be a PDF document.",
+        )
+    if Path(revised_filename).suffix.lower() != ".pdf":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Document B must be a PDF document.",
+        )
+    if original_bytes == revised_bytes:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Choose two different PDF documents to compare.",
+        )
+
+    indexed_documents: list[DocumentUploadResponse] = []
+    try:
+        # Each PDF gets its own temporary FAISS index so A and B stay identifiable.
+        indexed_original = await run_in_threadpool(
+            rag_service.process_document,
+            original_filename,
+            original_bytes,
+            "A",
+        )
+        indexed_documents.append(indexed_original)
+        indexed_revised = await run_in_threadpool(
+            rag_service.process_document,
+            revised_filename,
+            revised_bytes,
+            "B",
+        )
+        indexed_documents.append(indexed_revised)
+
+        (
+            overall_summary,
+            summary,
+            comparison_items,
+            coverage_note,
+            disclaimer,
+        ) = await run_in_threadpool(
+            rag_service.compare_documents,
+            indexed_original.document_id,
+            indexed_revised.document_id,
+        )
+        return DocumentComparisonResponse(
+            original_filename=indexed_original.filename,
+            revised_filename=indexed_revised.filename,
+            original_chunks=indexed_original.chunks,
+            revised_chunks=indexed_revised.chunks,
+            overall_summary=overall_summary,
+            summary=summary,
+            items=comparison_items,
+            coverage_note=coverage_note,
+            disclaimer=disclaimer,
+        )
+    except DocumentProcessingError as error:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=str(error)
+        ) from error
+    except RAGConfigurationError as error:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(error)
+        ) from error
+    except GeminiRequestError as error:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY, detail=str(error)
+        ) from error
+    finally:
+        # Comparison indexes are request-scoped and must not remain in memory.
+        for indexed_document in indexed_documents:
+            try:
+                await run_in_threadpool(
+                    rag_service.remove_document, indexed_document.document_id
+                )
+            except UnknownDocumentError:
+                logger.warning(
+                    "Comparison document %s was already removed",
                     indexed_document.document_id,
                 )

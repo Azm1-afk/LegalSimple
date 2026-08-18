@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 
 from backend import config
 from backend.rag.router import (
+    document_comparison_router,
     document_simplifier_router,
     risk_analyzer_router,
     router as companion_router,
@@ -30,6 +31,7 @@ app.add_middleware(
 app.include_router(companion_router)
 app.include_router(document_simplifier_router)
 app.include_router(risk_analyzer_router)
+app.include_router(document_comparison_router)
 
 
 @app.get("/api/health", tags=["Health"])
