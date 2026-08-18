@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta
         name="description"
-        content="Use LegalSimple's structured checklist to compare two versions of a legal document."
+        content="Compare an original and revised PDF with LegalSimple's document comparison tool."
     >
     <title>Document Comparison | LegalSimple</title>
     <link
@@ -28,7 +28,7 @@
                 <ul class="nav-list">
                     <li><a class="nav-link" href="index.html">Home</a></li>
                     <li><a class="nav-link" href="document-simplifier.html">Document Simplifier</a></li>
-                    <li><a class="nav-link" href="RiskAnalyzer_LegalSimple.html">Risk Analyzer</a></li>
+                    <li><a class="nav-link" href="risk_analyzer.html">Risk Analyzer</a></li>
                     <li><a class="nav-link" href="document-comparison.html" aria-current="page">Compare Documents</a></li>
                     <li><a class="nav-link" href="notice-generator.html">Notice Generator</a></li>
                     <li><a class="nav-link" href="faq.html">Legal FAQ</a></li>
@@ -44,8 +44,8 @@
                 <p class="eyebrow">Version-by-version review</p>
                 <h1 id="page-heading">Document Comparison</h1>
                 <p class="hero-description">
-                    Use a structured checklist to review two versions of a legal document for added clauses, removed
-                    terms, changed wording, and issues that may deserve closer attention.
+                    Compare an original and revised legal document for added clauses, removed terms, changed wording,
+                    and important practical differences.
                 </p>
                 <p class="tool-hero__notice">
                     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -65,7 +65,7 @@
                 <div class="section-header">
                     <p class="eyebrow">Comparison checklist</p>
                     <h2 id="comparison-upload-heading">Choose two documents</h2>
-                    <p>Select two PDF files to open a structured side-by-side review guide.</p>
+                    <p>Select an original PDF and its revised or comparison version.</p>
                 </div>
 
                 <form id="comparison-form" class="comparison-form" novalidate>
@@ -86,7 +86,7 @@
                             <div class="upload-slot__heading">
                                 <span class="document-number" aria-hidden="true">1</span>
                                 <div>
-                                    <h3 id="first-slot-heading">Document 1</h3>
+                                    <h3 id="first-slot-heading">Document A &mdash; Original</h3>
                                     <p>Original or earlier document</p>
                                 </div>
                             </div>
@@ -95,7 +95,7 @@
                                 class="document-dropzone"
                                 id="first-dropzone"
                                 role="region"
-                                aria-label="Document 1 PDF upload area"
+                                aria-label="Original Document A PDF upload area"
                                 aria-describedby="first-upload-help topic-note privacy-notice first-upload-error"
                             >
                                 <div class="document-dropzone__icon" aria-hidden="true">
@@ -117,9 +117,9 @@
                                     tabindex="-1"
                                     aria-describedby="first-upload-help topic-note privacy-notice first-upload-error"
                                 >
-                                <label class="visually-hidden-label" for="first-document-file">Choose Document 1 PDF</label>
+                                <label class="visually-hidden-label" for="first-document-file">Choose original Document A PDF</label>
                                 <button class="button button--secondary" type="button" id="choose-first-document">
-                                    Choose Document 1
+                                    Upload Original PDF
                                 </button>
                             </div>
 
@@ -133,15 +133,15 @@
                                     </svg>
                                 </div>
                                 <div class="selected-file__details">
-                                    <h4 id="first-file-label">Document 1 selected</h4>
+                                    <h4 id="first-file-label">Original Document selected</h4>
                                     <p class="selected-file__name" id="first-file-name"></p>
                                     <p class="selected-file__size" id="first-file-size"></p>
                                 </div>
                                 <div class="selected-file__actions">
                                     <button class="button button--outline button--small" type="button" id="replace-first-document">
-                                        Replace Document 1
+                                        Replace Original
                                     </button>
-                                    <button class="text-button" type="button" id="remove-first-document">Remove Document 1</button>
+                                    <button class="text-button" type="button" id="remove-first-document">Remove Original</button>
                                 </div>
                             </article>
                         </section>
@@ -150,7 +150,7 @@
                             <div class="upload-slot__heading">
                                 <span class="document-number" aria-hidden="true">2</span>
                                 <div>
-                                    <h3 id="second-slot-heading">Document 2</h3>
+                                    <h3 id="second-slot-heading">Document B &mdash; Revised</h3>
                                     <p>Updated or comparison document</p>
                                 </div>
                             </div>
@@ -159,7 +159,7 @@
                                 class="document-dropzone"
                                 id="second-dropzone"
                                 role="region"
-                                aria-label="Document 2 PDF upload area"
+                                aria-label="Revised Document B PDF upload area"
                                 aria-describedby="second-upload-help topic-note privacy-notice second-upload-error"
                             >
                                 <div class="document-dropzone__icon" aria-hidden="true">
@@ -181,9 +181,9 @@
                                     tabindex="-1"
                                     aria-describedby="second-upload-help topic-note privacy-notice second-upload-error"
                                 >
-                                <label class="visually-hidden-label" for="second-document-file">Choose Document 2 PDF</label>
+                                <label class="visually-hidden-label" for="second-document-file">Choose revised Document B PDF</label>
                                 <button class="button button--secondary" type="button" id="choose-second-document">
-                                    Choose Document 2
+                                    Upload Revised PDF
                                 </button>
                             </div>
 
@@ -197,15 +197,15 @@
                                     </svg>
                                 </div>
                                 <div class="selected-file__details">
-                                    <h4 id="second-file-label">Document 2 selected</h4>
+                                    <h4 id="second-file-label">Revised Document selected</h4>
                                     <p class="selected-file__name" id="second-file-name"></p>
                                     <p class="selected-file__size" id="second-file-size"></p>
                                 </div>
                                 <div class="selected-file__actions">
                                     <button class="button button--outline button--small" type="button" id="replace-second-document">
-                                        Replace Document 2
+                                        Replace Revised
                                     </button>
-                                    <button class="text-button" type="button" id="remove-second-document">Remove Document 2</button>
+                                    <button class="text-button" type="button" id="remove-second-document">Remove Revised</button>
                                 </div>
                             </article>
                         </section>
@@ -218,7 +218,8 @@
                             <path d="M12 14v3"></path>
                         </svg>
                         <p>
-                            <strong>Privacy:</strong> Your selected documents remain on your device.
+                            <strong>Privacy:</strong> Both PDFs are sent to the LegalSimple backend for this request.
+                            Their temporary in-memory comparison indexes are removed when the request finishes.
                         </p>
                     </aside>
 
@@ -229,7 +230,7 @@
                                 Swap Documents
                             </button>
                             <button class="button button--primary" type="submit" id="compare-documents-button" disabled>
-                                Open Comparison Guide
+                                Compare Documents
                             </button>
                         </div>
                     </div>
@@ -239,32 +240,32 @@
                     <div class="processing-panel__heading">
                         <span class="processing-spinner" aria-hidden="true"></span>
                         <div>
-                            <p class="eyebrow">Preparing guidance</p>
-                            <h2 id="processing-heading">Preparing the comparison guide</h2>
-                            <p id="processing-status" role="status" aria-live="polite">Loading the comparison format</p>
+                            <p class="eyebrow">Comparing documents</p>
+                            <h2 id="processing-heading">Reviewing both PDFs</h2>
+                            <p id="processing-status" role="status" aria-live="polite">Uploading both PDFs</p>
                         </div>
                     </div>
                     <ol class="processing-steps" id="processing-steps" aria-label="Comparison guide preparation steps">
-                        <li data-processing-step><span class="processing-step__marker" aria-hidden="true">1</span><span>Loading the comparison format</span><span class="processing-step__state">Waiting</span></li>
-                        <li data-processing-step><span class="processing-step__marker" aria-hidden="true">2</span><span>Organizing review areas</span><span class="processing-step__state">Waiting</span></li>
-                        <li data-processing-step><span class="processing-step__marker" aria-hidden="true">3</span><span>Preparing matching-section checks</span><span class="processing-step__state">Waiting</span></li>
-                        <li data-processing-step><span class="processing-step__marker" aria-hidden="true">4</span><span>Preparing added-and-removed checks</span><span class="processing-step__state">Waiting</span></li>
-                        <li data-processing-step><span class="processing-step__marker" aria-hidden="true">5</span><span>Organizing important-change topics</span><span class="processing-step__state">Waiting</span></li>
-                        <li data-processing-step><span class="processing-step__marker" aria-hidden="true">6</span><span>Displaying the review checklist</span><span class="processing-step__state">Waiting</span></li>
+                        <li data-processing-step><span class="processing-step__marker" aria-hidden="true">1</span><span>Uploading both PDFs</span><span class="processing-step__state">Waiting</span></li>
+                        <li data-processing-step><span class="processing-step__marker" aria-hidden="true">2</span><span>Extracting and indexing document text</span><span class="processing-step__state">Waiting</span></li>
+                        <li data-processing-step><span class="processing-step__marker" aria-hidden="true">3</span><span>Matching original passages to revised passages</span><span class="processing-step__state">Waiting</span></li>
+                        <li data-processing-step><span class="processing-step__marker" aria-hidden="true">4</span><span>Checking revised passages for new clauses</span><span class="processing-step__state">Waiting</span></li>
+                        <li data-processing-step><span class="processing-step__marker" aria-hidden="true">5</span><span>Checking changed amounts, dates, and deadlines</span><span class="processing-step__state">Waiting</span></li>
+                        <li data-processing-step><span class="processing-step__marker" aria-hidden="true">6</span><span>Generating structured explanations</span><span class="processing-step__state">Waiting</span></li>
                     </ol>
                 </section>
 
                 <section class="preview-result" id="preview-result" aria-labelledby="result-heading" hidden>
                     <div class="preview-result__header">
                         <div>
-                            <p class="eyebrow">General guidance</p>
-                            <h2 id="result-heading" tabindex="-1">Document comparison guide</h2>
+                            <p class="eyebrow">AI-assisted comparison</p>
+                            <h2 id="result-heading" tabindex="-1">Document comparison result</h2>
                             <dl class="result-file-list" aria-label="Selected documents">
-                                <div><dt>Document 1</dt><dd id="result-first-file"></dd></div>
-                                <div><dt>Document 2</dt><dd id="result-second-file"></dd></div>
+                                <div><dt>Original</dt><dd id="result-first-file"></dd></div>
+                                <div><dt>Revised</dt><dd id="result-second-file"></dd></div>
                             </dl>
                         </div>
-                        <span class="preview-badge">Review checklist</span>
+                        <span class="preview-badge">Comparison ready</span>
                     </div>
 
                     <aside class="preview-notice" id="preview-notice">
@@ -273,24 +274,23 @@
                             <path d="M12 11v5M12 8h.01"></path>
                         </svg>
                         <p>
-                            <strong>How to use this guide:</strong> Check each review area directly against both
-                            documents and verify every difference in the original wording.
+                            <strong>Overall summary:</strong>
+                            <span id="overall-summary"></span>
                         </p>
                     </aside>
 
                     <section class="comparison-summary" aria-labelledby="summary-heading" data-export-section>
                         <div class="result-section-heading">
-                            <p class="eyebrow">Comparison checklist</p>
-                            <h3 id="summary-heading">Core review areas</h3>
+                            <p class="eyebrow">Comparison summary</p>
+                            <h3 id="summary-heading">Changes found</h3>
                         </div>
                         <dl class="summary-grid">
-                            <div><dt>Document identity</dt><dd>Parties and purpose</dd></div>
-                            <div><dt>Changed sections</dt><dd>Wording and scope</dd></div>
-                            <div><dt>Added clauses</dt><dd>New obligations</dd></div>
-                            <div><dt>Removed clauses</dt><dd>Missing protections</dd></div>
-                            <div><dt>Dates and payments</dt><dd>Timing and cost</dd></div>
-                            <div><dt>Important changes</dt><dd>Legal consequences</dd></div>
+                            <div><dt>Modified</dt><dd id="summary-modifications">0</dd></div>
+                            <div><dt>Added</dt><dd id="summary-additions">0</dd></div>
+                            <div><dt>Removed</dt><dd id="summary-removals">0</dd></div>
+                            <div><dt>Unchanged</dt><dd id="summary-unchanged">0</dd></div>
                         </dl>
+                        <p class="comparison-coverage" id="comparison-coverage"></p>
                     </section>
 
                     <div class="result-filter" aria-labelledby="filter-heading">
@@ -303,189 +303,17 @@
                             <button class="filter-button" type="button" data-filter="added" aria-pressed="false">Added</button>
                             <button class="filter-button" type="button" data-filter="removed" aria-pressed="false">Removed</button>
                             <button class="filter-button" type="button" data-filter="modified" aria-pressed="false">Modified</button>
+                            <button class="filter-button" type="button" data-filter="unchanged" aria-pressed="false">Unchanged</button>
                             <button class="filter-button" type="button" data-filter="important" aria-pressed="false">Important</button>
                         </div>
                     </div>
 
-                    <div class="result-sections" id="result-sections">
-                        <article class="result-card result-card--overview" data-result-card data-category="modified" data-export-section>
-                            <div class="result-card__heading">
-                                <span class="change-badge change-badge--modified">Modified</span>
-                                <h3>Comparison Overview</h3>
-                            </div>
-                            <p>
-                                Begin by confirming whether the documents share the same purpose, then check notice,
-                                payment, responsibility, and termination wording.
-                            </p>
-                        </article>
-
-                        <article class="result-card result-card--matching" data-result-card data-category="unchanged" data-export-section>
-                            <div class="result-card__heading">
-                                <span class="change-badge change-badge--unchanged">Unchanged</span>
-                                <h3>Key Similarities</h3>
-                            </div>
-                            <ul>
-                                <li>Confirm whether both versions identify the same type of agreement.</li>
-                                <li>Check whether the main service description remains substantially similar.</li>
-                            </ul>
-                        </article>
-
-                        <article class="result-card" data-result-card data-category="modified important" data-export-section>
-                            <div class="result-card__heading">
-                                <span class="change-badge change-badge--attention">Needs attention</span>
-                                <h3>Key Differences</h3>
-                            </div>
-                            <p>
-                                Check whether Document 2 changes the notice period, payment timing, or steps needed to
-                                end the agreement.
-                            </p>
-                        </article>
-
-                        <article class="result-card result-card--added" data-result-card data-category="added" data-export-section>
-                            <div class="result-card__heading">
-                                <span class="change-badge change-badge--added">Added</span>
-                                <h3>Added Clauses</h3>
-                            </div>
-                            <p>Look for requirements that appear only in Document 2, including written-notice obligations.</p>
-                        </article>
-
-                        <article class="result-card result-card--removed" data-result-card data-category="removed" data-export-section>
-                            <div class="result-card__heading">
-                                <span class="change-badge change-badge--removed">Removed</span>
-                                <h3>Removed Clauses</h3>
-                            </div>
-                            <p>Check whether protections or obligations in Document 1 are absent from Document 2.</p>
-                        </article>
-
-                        <article class="result-card result-card--modified" data-result-card data-category="modified" data-export-section>
-                            <div class="result-card__heading">
-                                <span class="change-badge change-badge--modified">Modified</span>
-                                <h3>Modified Clauses</h3>
-                            </div>
-                            <div class="wording-comparison">
-                                <div class="wording-panel wording-panel--first">
-                                    <h4>Document 1 <span>Earlier wording pattern</span></h4>
-                                    <p>Payment is due within 30 days after an invoice is issued.</p>
-                                </div>
-                                <div class="wording-panel wording-panel--second">
-                                    <h4>Document 2 <span>Updated wording pattern</span></h4>
-                                    <p>Payment is due within 14 days after an invoice is issued.</p>
-                                </div>
-                            </div>
-                            <div class="change-explanation">
-                                <h4>How to explain the change</h4>
-                                <p>A shorter payment period gives the paying party less time to respond after an invoice is issued.</p>
-                            </div>
-                        </article>
-
-                        <article class="result-card" data-result-card data-category="modified" data-export-section>
-                            <div class="result-card__heading">
-                                <span class="change-badge change-badge--modified">Modified</span>
-                                <h3>Changes to Parties</h3>
-                            </div>
-                            <p>Check names, legal entities, addresses, and roles assigned to each party.</p>
-                        </article>
-
-                        <article class="result-card" data-result-card data-category="modified important" data-export-section>
-                            <div class="result-card__heading">
-                                <span class="change-badge change-badge--attention">Needs attention</span>
-                                <h3>Changes to Dates and Deadlines</h3>
-                            </div>
-                            <p>Compare every effective date, notice period, renewal date, and response deadline.</p>
-                        </article>
-
-                        <article class="result-card" data-result-card data-category="modified important" data-export-section>
-                            <div class="result-card__heading">
-                                <span class="change-badge change-badge--attention">Needs attention</span>
-                                <h3>Changes to Payments or Financial Obligations</h3>
-                            </div>
-                            <p>Compare payment amounts, due dates, grace periods, interest, and late-payment charges.</p>
-                        </article>
-
-                        <article class="result-card" data-result-card data-category="modified" data-export-section>
-                            <div class="result-card__heading">
-                                <span class="change-badge change-badge--modified">Modified</span>
-                                <h3>Changes to Responsibilities</h3>
-                            </div>
-                            <p>Check whether either version changes who must perform, report, deliver, or approve work.</p>
-                        </article>
-
-                        <article class="result-card result-card--added" data-result-card data-category="added important" data-export-section>
-                            <div class="result-card__heading">
-                                <span class="change-badge change-badge--added">Added</span>
-                                <h3>Changes to Termination or Cancellation Terms</h3>
-                            </div>
-                            <p>Compare the grounds, notice steps, cure periods, and consequences for ending the agreement.</p>
-                        </article>
-
-                        <article class="result-card" data-result-card data-category="modified important" data-export-section>
-                            <div class="result-card__heading">
-                                <span class="change-badge change-badge--attention">Needs attention</span>
-                                <h3>Changes to Penalties or Consequences</h3>
-                            </div>
-                            <p>Check whether a missed deadline, breach, or cancellation triggers different consequences.</p>
-                        </article>
-
-                        <section class="important-changes" data-result-card data-category="important" data-export-section aria-labelledby="important-heading">
-                            <div class="result-section-heading">
-                                <span class="change-badge change-badge--attention">Needs attention</span>
-                                <h3 id="important-heading">Important Changes Requiring Attention</h3>
-                            </div>
-                            <article class="important-change-card">
-                                <div class="important-change-card__header">
-                                    <div>
-                                        <p class="eyebrow">Review pattern &middot; notice period</p>
-                                        <h4>Shorter termination notice period</h4>
-                                    </div>
-                                    <span class="change-badge change-badge--modified">Modified</span>
-                                </div>
-                                <div class="wording-comparison">
-                                    <div class="wording-panel wording-panel--first">
-                                        <h5>Document 1 <span>Earlier wording pattern</span></h5>
-                                        <p>Either party may end the agreement by giving 30 days' written notice.</p>
-                                    </div>
-                                    <div class="wording-panel wording-panel--second">
-                                        <h5>Document 2 <span>Updated wording pattern</span></h5>
-                                        <p>Either party may end the agreement by giving 14 days' written notice.</p>
-                                    </div>
-                                </div>
-                                <dl class="important-change-details">
-                                    <div><dt>Plain-language explanation</dt><dd>A shorter period allows less time to prepare before the agreement ends.</dd></div>
-                                    <div><dt>Why it may matter</dt><dd>This type of change may deserve additional attention because it could affect planning time.</dd></div>
-                                </dl>
-                            </article>
-                        </section>
-
-                        <article class="result-card" data-result-card data-category="modified" data-export-section>
-                            <div class="result-card__heading">
-                                <span class="change-badge change-badge--modified">Modified</span>
-                                <h3>Legal Terms That Changed</h3>
-                            </div>
-                            <dl class="term-list">
-                                <div><dt>Notice</dt><dd>Check whether formal communication requirements change from email to written delivery.</dd></div>
-                                <div><dt>Business day</dt><dd>Check whether the definition excludes different weekends or public holidays.</dd></div>
-                            </dl>
-                        </article>
-
-                        <article class="result-card result-card--questions" data-result-card data-category="important" data-export-section>
-                            <div class="result-card__heading">
-                                <span class="change-badge change-badge--attention">Needs attention</span>
-                                <h3>Questions to Consider Asking a Lawyer</h3>
-                            </div>
-                            <ul>
-                                <li>How could a shorter notice period affect my situation?</li>
-                                <li>Are the payment and late-fee changes appropriate for this agreement?</li>
-                                <li>Do any changed definitions affect other clauses?</li>
-                            </ul>
-                        </article>
-                    </div>
+                    <div class="result-sections" id="result-sections"></div>
 
                     <p class="no-filter-results" id="no-filter-results" hidden>No review topics match this filter.</p>
 
                     <aside class="result-disclaimer" id="result-disclaimer">
-                        <strong>Important:</strong> This comparison checklist provides general information only and
-                        does not interpret the selected documents or replace professional legal advice. The original
-                        documents remain authoritative.
+                        <strong>Important:</strong> <span id="comparison-disclaimer"></span>
                     </aside>
 
                     <div class="result-actions" aria-label="Comparison guide actions">
@@ -496,6 +324,7 @@
                     <p class="action-status" id="action-status" role="status" aria-live="polite"></p>
                 </section>
 
+                <p class="upload-error comparison-request-error" id="comparison-request-error" role="alert" aria-live="assertive" tabindex="-1"></p>
                 <p class="visually-hidden" id="comparison-announcer" role="status" aria-live="polite"></p>
             </div>
         </section>
@@ -532,7 +361,7 @@
                 <h2>Features</h2>
                 <ul>
                     <li><a href="document-simplifier.html">Document Simplifier</a></li>
-                    <li><a href="RiskAnalyzer_LegalSimple.html">Risk Analyzer</a></li>
+                    <li><a href="risk_analyzer.html">Risk Analyzer</a></li>
                     <li><a href="document-comparison.html" aria-current="page">Compare Documents</a></li>
                     <li><a href="notice-generator.html">Notice Generator</a></li>
                     <li><a href="faq.html">Legal FAQ</a></li>
