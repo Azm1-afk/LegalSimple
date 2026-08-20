@@ -303,7 +303,7 @@
         button.setAttribute('aria-pressed', String(willShow));
     }
 
-    function validateSignupForm(event) {
+        function validateSignupForm(event) {
         event.preventDefault();
         clearAuthStatuses();
 
@@ -342,15 +342,41 @@
             return;
         }
 
-        showAuthStatus(
-            'signup',
-            'Your sign-up details meet the displayed requirements.',
-            'success'
-        );
-        clearSensitiveFields();
+        showAuthStatus('signup', 'Creating your account...', 'info');
+
+        fetch('/api/auth/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: elements.signupEmail.value.split('@')[0],
+                email: elements.signupEmail.value,
+                password: elements.signupPassword.value,
+            }),
+        })
+            .then(function (response) {
+                return response.json().then(function (data) {
+                    return { ok: response.ok, data: data };
+                });
+            })
+            .then(function (result) {
+                if (!result.ok) {
+                    const detail = result.data && result.data.detail
+                        ? result.data.detail
+                        : 'Sign-up failed. Please try again.';
+                    showAuthStatus('signup', detail, 'error');
+                    return;
+                }
+
+                showAuthStatus('signup', 'Account created! You can now log in.', 'success');
+                clearSensitiveFields();
+                switchAuthMode('login', { focusTab: true });
+            })
+            .catch(function () {
+                showAuthStatus('signup', 'Network error. Please try again.', 'error');
+            });
     }
 
-    function validateLoginForm(event) {
+        function validateLoginForm(event) {
         event.preventDefault();
         clearAuthStatuses();
 
@@ -382,12 +408,41 @@
             return;
         }
 
-        showAuthStatus(
-            'login',
-            'Your login form entries are complete.',
-            'success'
-        );
-        clearSensitiveFields();
+        showAuthStatus('login', 'Logging in...', 'info');
+
+        fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: elements.loginEmail.value,
+                password: elements.loginPassword.value,
+            }),
+        })
+            .then(function (response) {
+                return response.json().then(function (data) {
+                    return { ok: response.ok, data: data };
+                });
+            })
+            .then(function (result) {
+                if (!result.ok) {
+                    const detail = result.data && result.data.detail
+                        ? result.data.detail
+                        : 'Login failed. Please try again.';
+                    showAuthStatus('login', detail, 'error');
+                    return;
+                }
+
+                localStorage.setItem('access_token', result.data.access_token);
+                showAuthStatus('login', 'Logged in successfully!', 'success');
+                clearSensitiveFields();
+
+                setTimeout(function () {
+                    window.location.href = 'index.html';
+                }, 800);
+            })
+            .catch(function () {
+                showAuthStatus('login', 'Network error. Please try again.', 'error');
+            });
     }
 
     function handleGoogleSignIn() {
