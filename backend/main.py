@@ -7,13 +7,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from backend import config
+from backend.database import Base, engine
+from backend import models  # noqa: F401
+from backend.auth import router as auth_router
 from backend.rag.router import (
     document_comparison_router,
     document_simplifier_router,
     risk_analyzer_router,
     router as companion_router,
 )
-
 
 logging.basicConfig(
     level=logging.INFO,
@@ -28,10 +30,14 @@ app.add_middleware(
     allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type"],
 )
+
+Base.metadata.create_all(bind=engine)
+
 app.include_router(companion_router)
 app.include_router(document_simplifier_router)
 app.include_router(risk_analyzer_router)
 app.include_router(document_comparison_router)
+app.include_router(auth_router)
 
 
 @app.get("/api/health", tags=["Health"])
