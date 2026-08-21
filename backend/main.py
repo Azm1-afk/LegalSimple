@@ -46,6 +46,12 @@ def health_check() -> dict[str, str]:
     return {"status": "ok"}
 
 
+@app.get("/api/auth/google-client-id", tags=["Auth"])
+def google_client_id() -> dict[str, str]:
+    """Expose the public Google OAuth client ID to the frontend."""
+    return {"client_id": config.GOOGLE_OAUTH_CLIENT_ID}
+
+
 # Serving the existing static frontend here avoids CORS during the simplest local setup.
 app.mount(
     "/",

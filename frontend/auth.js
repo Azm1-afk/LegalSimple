@@ -303,7 +303,7 @@
         button.setAttribute('aria-pressed', String(willShow));
     }
 
-        function validateSignupForm(event) {
+    function validateSignupForm(event) {
         event.preventDefault();
         clearAuthStatuses();
 
@@ -376,7 +376,7 @@
             });
     }
 
-        function validateLoginForm(event) {
+    function validateLoginForm(event) {
         event.preventDefault();
         clearAuthStatuses();
 
@@ -447,11 +447,71 @@
 
     function handleGoogleSignIn() {
         clearAuthStatuses();
-        showAuthStatus(
-            activeMode,
-            'Google sign-in was not completed.',
-            'info'
-        );
+        showAuthStatus(activeMode, 'Redirecting to Google...', 'info');
+
+        fetch('/api/auth/google-client-id')
+            .then(function (res) {
+                return res.json();
+            })
+            .then(function (data) {
+                const redirectUri = window.location.origin + '/auth.html';
+                const params = new URLSearchParams({
+                    client_id: data.client_id,
+                    redirect_uri: redirectUri,
+                    response_type: 'token',
+                    scope: 'openid email profile',
+                    prompt: 'select_account',
+                });
+
+                window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
+            })
+            .catch(function () {
+                showAuthStatus(activeMode, 'Could not start Google sign-in.', 'error');
+            });
+    }
+
+    function handleGoogleRedirectReturn() {
+        const hash = window.location.hash;
+
+        if (!hash || hash.indexOf('access_token=') === -1) {
+            return;
+        }
+
+        const params = new URLSearchParams(hash.substring(1));
+        const googleAccessToken = params.get('access_token');
+
+        if (!googleAccessToken) {
+            return;
+        }
+
+        showAuthStatus('login', 'Signing in with Google...', 'info');
+
+        fetch('/api/auth/google-token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ access_token: googleAccessToken }),
+        })
+            .then(function (res) {
+                return res.json().then(function (data) {
+                    return { ok: res.ok, data: data };
+                });
+            })
+            .then(function (result) {
+                if (!result.ok) {
+                    showAuthStatus('login', 'Google sign-in failed.', 'error');
+                    return;
+                }
+
+                localStorage.setItem('access_token', result.data.access_token);
+                showAuthStatus('login', 'Logged in successfully!', 'success');
+
+                setTimeout(function () {
+                    window.location.href = 'index.html';
+                }, 800);
+            })
+            .catch(function () {
+                showAuthStatus('login', 'Network error during Google sign-in.', 'error');
+            });
     }
 
     function handleTabKeydown(event) {
@@ -593,6 +653,8 @@
                 elements.loginPassword.value ? '' : 'Enter your password.'
             );
         });
+
+        handleGoogleRedirectReturn();
 
         const initialMode = window.location.hash.toLowerCase() === '#login' ? 'login' : 'signup';
         switchAuthMode(initialMode, { updateHash: false });
