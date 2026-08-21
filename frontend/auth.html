@@ -14,7 +14,8 @@
     >
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="auth.css">
-    <script src="auth.js" defer></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="auth.js" defer></script>
 </head>
 <body class="auth-page">
     <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -230,6 +231,7 @@
                             </svg>
                             <span>Sign in with Google</span>
                         </button>
+                        <div class="google-signin-container" data-google-container></div>
 
                         <p class="auth-status" id="login-status" role="status" aria-live="polite"></p>
 

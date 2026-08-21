@@ -52,3 +52,16 @@ def get_frontend_origins() -> list[str]:
         for origin in configured_origins.split(",")
         if origin.strip()
     ]
+
+# Database
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "sqlite:///./legalsimple.db",
+)
+
+# JWT Authentication
+SECRET_KEY = os.getenv("SECRET_KEY", "change-this-secret-key")
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
+# Google OAuth
+GOOGLE_OAUTH_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID", "")

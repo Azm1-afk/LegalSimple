@@ -15,3 +15,9 @@ backend/temp_files/
 backend/uploads/
 *.faiss
 *.pkl
+venv/
+__pycache__/
+*.pyc
+.env
+legalsimple.db
+*.db
