@@ -9,6 +9,9 @@ A legal AI based web application with features to help people beat legal technic
    AI features and replace `SECRET_KEY` with a unique random value for JWT
    authentication. `GOOGLE_OAUTH_CLIENT_ID` is only needed for Google sign-in;
    the default local database is SQLite.
+   For local Google OAuth, register `http://127.0.0.1:8000` as an authorized
+   JavaScript origin and `http://127.0.0.1:8000/auth.html` as an authorized
+   redirect URI in the Google Cloud Console.
 4. From the project root, run `uvicorn backend.main:app --reload`.
 5. Open `http://127.0.0.1:8000` in a browser.
 
