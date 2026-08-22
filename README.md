@@ -5,7 +5,10 @@ A legal AI based web application with features to help people beat legal technic
 
 1. Create and activate a Python virtual environment.
 2. Install the backend dependencies with `pip install -r backend/requirements.txt`.
-3. Copy `backend/.env.example` to `backend/.env` and replace the placeholder with your Google Gemini API key.
+3. Copy `backend/.env.example` to `backend/.env`. Set `GOOGLE_API_KEY` for the
+   AI features and replace `SECRET_KEY` with a unique random value for JWT
+   authentication. `GOOGLE_OAUTH_CLIENT_ID` is only needed for Google sign-in;
+   the default local database is SQLite.
 4. From the project root, run `uvicorn backend.main:app --reload`.
 5. Open `http://127.0.0.1:8000` in a browser.
 

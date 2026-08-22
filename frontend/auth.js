@@ -454,6 +454,15 @@
                 return res.json();
             })
             .then(function (data) {
+                if (!data.client_id) {
+                    showAuthStatus(
+                        activeMode,
+                        'Google sign-in is not configured. Add GOOGLE_OAUTH_CLIENT_ID to backend/.env.',
+                        'error'
+                    );
+                    return;
+                }
+
                 const redirectUri = window.location.origin + '/auth.html';
                 const params = new URLSearchParams({
                     client_id: data.client_id,
