@@ -98,6 +98,21 @@ class GeminiRequestError(RuntimeError):
     """Raised when Gemini cannot complete an embedding or generation request."""
 
 
+def validate_document_upload(filename: str, file_bytes: bytes) -> tuple[str, str]:
+    """Validate an uploaded document's name, type, and size."""
+    safe_filename = Path(filename).name.strip()
+    extension = Path(safe_filename).suffix.lower()
+
+    if not safe_filename or extension not in SUPPORTED_EXTENSIONS:
+        raise DocumentProcessingError("Choose a PDF, DOCX, or TXT document.")
+    if not file_bytes:
+        raise DocumentProcessingError("The selected document is empty.")
+    if len(file_bytes) > config.MAX_UPLOAD_BYTES:
+        raise DocumentProcessingError("The selected document is larger than 10 MB.")
+
+    return safe_filename, extension
+
+
 @dataclass(frozen=True)
 class DocumentStore:
     """The in-memory FAISS index and metadata for one uploaded document."""
@@ -145,15 +160,7 @@ class RAGService:
         document_label: str | None = None,
     ) -> DocumentUploadResponse:
         """Parse and index one supported document in an isolated FAISS store."""
-        safe_filename = Path(filename).name.strip()
-        extension = Path(safe_filename).suffix.lower()
-
-        if not safe_filename or extension not in SUPPORTED_EXTENSIONS:
-            raise DocumentProcessingError("Choose a PDF, DOCX, or TXT document.")
-        if not file_bytes:
-            raise DocumentProcessingError("The selected document is empty.")
-        if len(file_bytes) > config.MAX_UPLOAD_BYTES:
-            raise DocumentProcessingError("The selected document is larger than 10 MB.")
+        safe_filename, extension = validate_document_upload(filename, file_bytes)
 
         try:
             documents = self._parse_document(safe_filename, extension, file_bytes)
