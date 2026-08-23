@@ -330,69 +330,222 @@ svg {
     color: var(--color-white);
 }
 
-/* Authenticated header state */
-.nav-auth-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-xs);
-}
+/* 
+   **Authenticated user profile dropdown**
+*/
 
-.nav-user-display {
-    display: inline-flex;
-    min-height: 40px;
-    align-items: center;
-    gap: var(--space-xs);
-    color: var(--color-navy-900);
-    font-size: 0.875rem;
-    font-weight: 700;
-    line-height: 1.25;
+.nav-profile {
+    position: relative;
+    list-style: none;
 }
-
 .nav-user-icon {
-    display: inline-grid;
+    display: block;
     width: 2rem;
     height: 2rem;
-    place-items: center;
+    flex: 0 0 2rem;
     border-radius: 50%;
-    background: var(--color-teal-700);
-    color: var(--color-white);
-    font-size: 0.82rem;
-    font-weight: 800;
-    text-transform: uppercase;
+    object-fit: cover;
 }
 
-.nav-user-name {
+.site-header .primary-navigation .nav-profile__credit {
+    min-height: auto;
+    padding: 0.5rem var(--space-md);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    font-size: 0.68rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.35;
+    text-transform: none;
+}
+
+.nav-profile__trigger {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.3rem 0.65rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--color-navy-900);
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    font-size: 0.85rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.25;
+    cursor: pointer;
+    transition:
+        border-color var(--transition),
+        background-color var(--transition);
+}
+
+.nav-profile__trigger:hover,
+.nav-profile__trigger[aria-expanded="true"] {
+    border-color: var(--color-border);
+    background: var(--color-teal-100);
+}
+
+.nav-profile__trigger:focus-visible {
+    outline: 3px solid rgba(15, 118, 110, 0.28);
+    outline-offset: 2px;
+}
+
+.nav-profile__chevron {
+    font-size: 0.72rem;
+    line-height: 1;
+    transition: transform var(--transition);
+}
+
+.nav-profile__trigger[aria-expanded="true"]
+.nav-profile__chevron {
+    transform: rotate(180deg);
+}
+
+.nav-profile__menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    z-index: 1100;
+    width: min(17rem, calc(100vw - 2rem));
     overflow: hidden;
-    max-width: 9rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.nav-profile__menu[hidden] {
+    display: none;
+}
+
+.nav-profile__summary {
+    display: grid;
+    gap: 0.15rem;
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.nav-profile__summary strong {
+    overflow: hidden;
+    color: var(--color-navy-900);
+    font-size: 0.9rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.nav-logout-button {
-    min-height: 40px;
-    padding-inline: 0.95rem;
-    border: 1px solid var(--color-navy-700);
-    border-radius: var(--radius);
-    background: transparent;
-    color: var(--color-navy-700);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-size: 0.82rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition:
-        border-color var(--transition),
-        background-color var(--transition),
-        color var(--transition);
+.nav-profile__summary span {
+    overflow: hidden;
+    color: var(--color-text-muted);
+    font-size: 0.78rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
+
+.nav-profile__menu a,
+.nav-profile__menu button {
+    display: flex;
+    width: 100%;
+    min-height: 42px;
+    align-items: center;
+    padding: 0.65rem var(--space-md);
+    border: 0;
+    background: transparent;
+    color: var(--color-text);
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    font-size: 0.85rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.nav-profile__menu a:hover,
+.nav-profile__menu button:hover {
+    background: var(--color-teal-100);
+    color: var(--color-navy-900);
+}
+
+.nav-profile__menu a:focus-visible,
+.nav-profile__menu button:focus-visible {
+    position: relative;
+    outline: 3px solid rgba(15, 118, 110, 0.28);
+    outline-offset: -3px;
+}
+
+.nav-profile__logout {
+    border-top: 1px solid var(--color-border) !important;
+    color: var(--color-danger) !important;
+}
+
+.nav-profile__logout:hover {
+    background: #fff1f1 !important;
+}
+
 /*
- * Keeps the Logout button typography identical across pages.
- * The higher specificity prevents page-specific button rules
- * from overriding the shared navigation.
+ * Flaticon attribution for the profile avatar.
  */
-.site-header .primary-navigation .nav-logout-button {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-size: 0.82rem;
+.site-header .primary-navigation .nav-profile__credit {
+    display: block;
+    width: 100%;
+    min-height: auto;
+    box-sizing: border-box;
+    padding: 0.55rem var(--space-md);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-text-muted);
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    font-size: 0.68rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.4;
+    text-align: left;
+    text-decoration: none;
+    text-transform: none;
+    white-space: normal;
+}
+
+.site-header .primary-navigation .nav-profile__credit:hover {
+    background: var(--color-teal-100);
+    color: var(--color-navy-700);
+    text-decoration: underline;
+}
+
+/*
+ * Prevents page-specific stylesheets from changing the
+ * profile trigger and dropdown typography.
+ */
+.site-header .primary-navigation .nav-profile__trigger {
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    font-size: 0.85rem;
     font-style: normal;
     font-weight: 700;
     line-height: 1.25;
@@ -400,16 +553,22 @@ svg {
     text-transform: none;
 }
 
-.nav-logout-button:hover {
-    border-color: var(--color-navy-900);
-    background: var(--color-navy-900);
-    color: var(--color-white);
+.site-header .primary-navigation .nav-profile__menu a,
+.site-header .primary-navigation .nav-profile__menu button {
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    font-size: 0.85rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: normal;
+    text-transform: none;
 }
 
-.nav-logout-button:focus-visible {
-    outline: 3px solid rgba(15, 118, 110, 0.28);
-    outline-offset: 2px;
-}
 
 /* Hero */
 .hero {
