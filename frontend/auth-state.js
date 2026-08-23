@@ -1,7 +1,8 @@
 /*
  * MEMBER 3 CHANGE:
- * Displays the authenticated user's name in the shared navigation,
- * provides logout functionality, and handles invalid or expired tokens.
+ * Displays the authenticated user in a dropdown profile menu,
+ * provides logout functionality, displays the custom avatar,
+ * and handles invalid or expired authentication tokens.
  */
 
 (function () {
@@ -10,7 +11,7 @@
     const TOKEN_KEY = 'access_token';
 
     /**
-     * Finds the existing "Sign Up / Login" navigation link.
+     * Finds the existing Sign Up / Login navigation link.
      */
     function findAuthLink() {
         return document.querySelector(
@@ -19,7 +20,7 @@
     }
 
     /**
-     * Creates and displays the default logged-out navigation link.
+     * Restores the normal Sign Up / Login navigation.
      */
     function showLoggedOutNavigation(container) {
         if (!container) {
@@ -27,7 +28,10 @@
         }
 
         container.replaceChildren();
-        container.classList.remove('nav-auth-actions');
+        container.classList.remove(
+            'nav-auth-actions',
+            'nav-profile'
+        );
 
         const authLink = document.createElement('a');
         authLink.className = 'nav-link nav-link--button';
@@ -38,7 +42,7 @@
     }
 
     /**
-     * Removes the stored JWT and returns the user to the home page.
+     * Removes the stored JWT and returns to the homepage.
      */
     function logout(container) {
         window.localStorage.removeItem(TOKEN_KEY);
@@ -47,14 +51,22 @@
     }
 
     /**
-     * Returns a safe name for display in the navigation.
+     * Returns the user's name or an email-based fallback.
      */
     function getDisplayName(user) {
-        if (user && typeof user.name === 'string' && user.name.trim()) {
+        if (
+            user &&
+            typeof user.name === 'string' &&
+            user.name.trim()
+        ) {
             return user.name.trim();
         }
 
-        if (user && typeof user.email === 'string' && user.email.trim()) {
+        if (
+            user &&
+            typeof user.email === 'string' &&
+            user.email.trim()
+        ) {
             return user.email.trim().split('@')[0];
         }
 
@@ -62,8 +74,19 @@
     }
 
     /**
-     * Replaces the authentication link with the authenticated user's
-     * name, account initial, and logout button.
+     * Closes the profile dropdown.
+     */
+    function closeProfileMenu(trigger, menu, returnFocus) {
+        menu.hidden = true;
+        trigger.setAttribute('aria-expanded', 'false');
+
+        if (returnFocus) {
+            trigger.focus();
+        }
+    }
+
+    /**
+     * Creates the authenticated profile dropdown.
      */
     function showLoggedInNavigation(container, user) {
         if (!container || !user) {
@@ -72,54 +95,194 @@
 
         const displayName = getDisplayName(user);
 
+        const email =
+            typeof user.email === 'string'
+                ? user.email.trim()
+                : '';
+
         container.replaceChildren();
-        container.classList.add('nav-auth-actions');
+        container.classList.remove('nav-auth-actions');
+        container.classList.add('nav-profile');
 
-        const userDisplay = document.createElement('span');
-        userDisplay.className = 'nav-user-display';
+        /*
+         * Profile dropdown trigger.
+         */
+        const trigger = document.createElement('button');
+        trigger.className = 'nav-profile__trigger';
+        trigger.type = 'button';
+        trigger.setAttribute('aria-haspopup', 'menu');
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.setAttribute(
+            'aria-label',
+            'Open account menu for ' + displayName
+        );
 
-        if (typeof user.email === 'string' && user.email.trim()) {
-            userDisplay.title = user.email.trim();
-        }
-
-        const userIcon = document.createElement('span');
+        /*
+         * Custom animal avatar.
+         */
+        const userIcon = document.createElement('img');
         userIcon.className = 'nav-user-icon';
+        userIcon.src = '/assets/user-avatar.png';
+        userIcon.alt = '';
+        userIcon.width = 32;
+        userIcon.height = 32;
+        userIcon.draggable = false;
         userIcon.setAttribute('aria-hidden', 'true');
-        userIcon.textContent = displayName.charAt(0).toUpperCase();
 
+        /*
+         * Authenticated user's display name.
+         */
         const userName = document.createElement('span');
         userName.className = 'nav-user-name';
-
-        // textContent prevents a user's name from being treated as HTML.
         userName.textContent = displayName;
 
-        const logoutButton = document.createElement('button');
-        logoutButton.className = 'nav-logout-button';
-        logoutButton.type = 'button';
-        logoutButton.textContent = 'Logout';
-        logoutButton.setAttribute(
-            'aria-label',
-            'Log out of the LegalSimple account for ' + displayName
+        /*
+         * Dropdown arrow.
+         */
+        const chevron = document.createElement('span');
+        chevron.className = 'nav-profile__chevron';
+        chevron.setAttribute('aria-hidden', 'true');
+        chevron.textContent = '▾';
+
+        trigger.append(
+            userIcon,
+            userName,
+            chevron
         );
+
+        /*
+         * Profile dropdown menu.
+         */
+        const menu = document.createElement('div');
+        menu.className = 'nav-profile__menu';
+        menu.setAttribute('role', 'menu');
+        menu.hidden = true;
+
+        /*
+         * User account summary.
+         */
+        const summary = document.createElement('div');
+        summary.className = 'nav-profile__summary';
+
+        const summaryName = document.createElement('strong');
+        summaryName.textContent = displayName;
+
+        const summaryEmail = document.createElement('span');
+        summaryEmail.textContent = email;
+
+        summary.appendChild(summaryName);
+
+        if (email) {
+            summary.appendChild(summaryEmail);
+        }
+
+        /*
+         * Existing Legal FAQ feature.
+         */
+        const faqLink = document.createElement('a');
+        faqLink.href = 'faq.html';
+        faqLink.setAttribute('role', 'menuitem');
+        faqLink.textContent = 'Legal FAQ / Help';
+
+        /*
+         * Logout action.
+         */
+        const logoutButton = document.createElement('button');
+        logoutButton.className = 'nav-profile__logout';
+        logoutButton.type = 'button';
+        logoutButton.setAttribute('role', 'menuitem');
+        logoutButton.textContent = 'Log Out';
 
         logoutButton.addEventListener('click', function () {
             logout(container);
         });
 
-        userDisplay.append(userIcon, userName);
-        container.append(userDisplay, logoutButton);
+        /*
+         * Attribution required for the Flaticon avatar.
+         */
+        const avatarCredit = document.createElement('a');
+        avatarCredit.className = 'nav-profile__credit';
+        avatarCredit.href =
+            'https://www.flaticon.com/free-icons/animals';
+        avatarCredit.target = '_blank';
+        avatarCredit.rel = 'noopener noreferrer';
+        avatarCredit.textContent =
+            'Animals icons created by Magnific - Flaticon';
+
+        /*
+         * Assemble the dropdown menu.
+         */
+        menu.append(
+            summary,
+            faqLink,
+            logoutButton,
+            avatarCredit
+        );
+
+        /*
+         * Add the trigger and menu to the existing navigation item.
+         */
+        container.append(
+            trigger,
+            menu
+        );
+
+        /*
+         * Opens or closes the dropdown.
+         */
+        trigger.addEventListener('click', function (event) {
+            event.stopPropagation();
+
+            const isOpening = menu.hidden;
+
+            menu.hidden = !isOpening;
+            trigger.setAttribute(
+                'aria-expanded',
+                String(isOpening)
+            );
+        });
+
+        /*
+         * Prevents menu clicks from immediately closing it.
+         */
+        menu.addEventListener('click', function (event) {
+            event.stopPropagation();
+        });
+
+        /*
+         * Closes the menu when clicking outside.
+         */
+        document.addEventListener('click', function () {
+            closeProfileMenu(
+                trigger,
+                menu,
+                false
+            );
+        });
+
+        /*
+         * Closes the menu when Escape is pressed.
+         */
+        document.addEventListener('keydown', function (event) {
+            if (
+                event.key === 'Escape' &&
+                !menu.hidden
+            ) {
+                closeProfileMenu(
+                    trigger,
+                    menu,
+                    true
+                );
+            }
+        });
     }
 
     /**
-     * Retrieves the authenticated user's information from the backend.
+     * Loads the authenticated user from the backend.
      */
     async function loadCurrentUser() {
         const authLink = findAuthLink();
 
-        /*
-         * Stop if the current page does not contain the shared
-         * authentication navigation link.
-         */
         if (!authLink) {
             return;
         }
@@ -130,10 +293,11 @@
             return;
         }
 
-        const token = window.localStorage.getItem(TOKEN_KEY);
+        const token =
+            window.localStorage.getItem(TOKEN_KEY);
 
         /*
-         * Keep the normal Sign Up / Login link when no token exists.
+         * Keep the standard authentication link when logged out.
          */
         if (!token) {
             showLoggedOutNavigation(container);
@@ -141,77 +305,89 @@
         }
 
         try {
-            const response = await window.fetch('/api/auth/me', {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    Accept: 'application/json',
-                },
-            });
+            const response = await window.fetch(
+                '/api/auth/me',
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                        Accept: 'application/json',
+                    },
+                }
+            );
 
             /*
-             * A 401 or 403 response means the stored token is no longer
-             * valid or the user is not authorized.
+             * Remove invalid or expired tokens.
              */
-            if (response.status === 401 || response.status === 403) {
+            if (
+                response.status === 401 ||
+                response.status === 403
+            ) {
                 window.localStorage.removeItem(TOKEN_KEY);
                 showLoggedOutNavigation(container);
                 return;
             }
 
             /*
-             * Do not delete the token for temporary backend errors.
+             * Do not remove potentially valid tokens during
+             * temporary backend failures.
              */
             if (!response.ok) {
                 throw new Error(
-                    'Unable to retrieve the authenticated user. Status: ' +
+                    'Unable to retrieve the authenticated user. ' +
+                    'Status: ' +
                     response.status
                 );
             }
 
             const user = await response.json();
 
-            /*
-             * The /api/auth/me endpoint should return at least a name
-             * or email address.
-             */
-            const hasValidName =
+            const hasName =
                 user &&
                 typeof user.name === 'string' &&
                 Boolean(user.name.trim());
 
-            const hasValidEmail =
+            const hasEmail =
                 user &&
                 typeof user.email === 'string' &&
                 Boolean(user.email.trim());
 
-            if (!hasValidName && !hasValidEmail) {
+            if (!hasName && !hasEmail) {
                 console.error(
-                    'The authenticated user response does not contain a valid name or email.'
+                    'The authenticated user response contains ' +
+                    'no valid name or email.'
                 );
+
                 showLoggedOutNavigation(container);
                 return;
             }
 
-            showLoggedInNavigation(container, user);
+            showLoggedInNavigation(
+                container,
+                user
+            );
         } catch (error) {
             /*
-             * A temporary network or backend failure should not remove
-             * a potentially valid token. The normal login link remains
-             * available until the user can be verified.
+             * Keep the token during temporary network failures.
              */
-            console.error('Unable to load the current user:', error);
+            console.error(
+                'Unable to load the current user:',
+                error
+            );
+
             showLoggedOutNavigation(container);
         }
     }
 
     /*
-     * The script is loaded with the defer attribute, so the HTML has
-     * normally been parsed before this function runs. The readyState
-     * check also keeps it safe if defer is accidentally omitted.
+     * The script normally uses defer, but this also works
+     * if defer is accidentally removed.
      */
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadCurrentUser);
+        document.addEventListener(
+            'DOMContentLoaded',
+            loadCurrentUser
+        );
     } else {
         loadCurrentUser();
     }
