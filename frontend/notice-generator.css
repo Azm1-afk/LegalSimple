@@ -1,6 +1,9 @@
-/* Notice Generator — page-specific styles.
-   Reuses design tokens (colors, spacing, radius, shadow) defined in styles.css.
-   Kept in its own file so it doesn't conflict with edits to the shared stylesheet. */
+/*
+ * Notice Generator — page-specific styles.
+ *
+ * Reuses design tokens defined in styles.css.
+ * Kept in its own file so it does not conflict with the shared stylesheet.
+ */
 
 .notice-generator-page .generator-section {
     background: var(--color-surface);
@@ -14,6 +17,7 @@
 }
 
 /* Form */
+
 .notice-generator-page .generator-form h2,
 .notice-generator-page .preview-column h2 {
     font-size: 1.25rem;
@@ -53,6 +57,16 @@
     color: var(--color-text);
 }
 
+/*
+ * MEMBER 3 CHANGE:
+ * Visually distinguishes optional fields without removing their labels.
+ */
+.notice-generator-page .optional-label {
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    font-weight: 400;
+}
+
 .notice-generator-page .form-field input,
 .notice-generator-page .form-field select,
 .notice-generator-page .form-field textarea {
@@ -63,7 +77,9 @@
     background: var(--color-surface);
     color: var(--color-text);
     font: inherit;
-    transition: border-color var(--transition), box-shadow var(--transition);
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition);
 }
 
 .notice-generator-page .form-field input:hover,
@@ -80,6 +96,22 @@
     box-shadow: 0 0 0 3px rgba(22, 122, 120, 0.15);
 }
 
+/*
+ * MEMBER 3 CHANGE:
+ * Provides a visible invalid-field state after browser validation.
+ */
+.notice-generator-page .form-field input:user-invalid,
+.notice-generator-page .form-field select:user-invalid,
+.notice-generator-page .form-field textarea:user-invalid {
+    border-color: #b42318;
+}
+
+.notice-generator-page .form-field input:user-invalid:focus,
+.notice-generator-page .form-field select:user-invalid:focus,
+.notice-generator-page .form-field textarea:user-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.15);
+}
+
 .notice-generator-page .form-field textarea {
     resize: vertical;
 }
@@ -89,7 +121,35 @@
     color: var(--color-text-muted);
 }
 
+/*
+ * MEMBER 3 CHANGE:
+ * Added layout for the Generate Draft action.
+ */
+.notice-generator-page .generator-form__actions {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    margin-top: var(--space-lg);
+}
+
+.notice-generator-page .generator-form__actions .button {
+    cursor: pointer;
+}
+
+/*
+ * MEMBER 3 CHANGE:
+ * Accessible validation and generation message.
+ */
+.notice-generator-page .form-status {
+    min-height: 1.5rem;
+    margin-top: var(--space-sm);
+    color: var(--color-teal-700);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
 /* Notice draft */
+
 .notice-generator-page .letter-preview {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
@@ -107,10 +167,43 @@
     white-space: pre-wrap;
 }
 
+/*
+ * MEMBER 3 CHANGE:
+ * Makes programmatic focus on the generated result visible.
+ */
+.notice-generator-page .letter-paper:focus {
+    outline: 3px solid rgba(22, 122, 120, 0.25);
+    outline-offset: var(--space-xs);
+}
+
 .notice-generator-page .letter-placeholder {
     color: var(--color-text-muted);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
     font-style: italic;
+}
+
+/*
+ * MEMBER 3 CHANGE:
+ * Warning shown only after a valid notice draft is generated.
+ */
+.notice-generator-page .draft-warning {
+    margin-bottom: var(--space-md);
+    padding: var(--space-md);
+    border: 1px solid #d69e2e;
+    border-left: 4px solid #b7791f;
+    border-radius: calc(var(--radius) - 4px);
+    background: #fffaf0;
+    color: #744210;
+    line-height: 1.5;
+}
+
+.notice-generator-page .draft-warning strong {
+    color: #652b19;
 }
 
 .notice-generator-page .preview-actions {
@@ -123,6 +216,15 @@
     cursor: pointer;
 }
 
+/*
+ * MEMBER 3 CHANGE:
+ * Clearly identifies unavailable Copy and Print actions.
+ */
+.notice-generator-page .preview-actions .button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
 .notice-generator-page .copy-status {
     margin-top: var(--space-sm);
     font-size: 0.9rem;
@@ -130,11 +232,36 @@
     min-height: 1.2em;
 }
 
+/* Tablet and smaller screens */
+
 @media (max-width: 63.99rem) {
     .notice-generator-page .generator-layout {
         grid-template-columns: 1fr;
     }
 }
+
+/*
+ * MEMBER 3 CHANGE:
+ * Allows action buttons to use the available width more comfortably on small
+ * mobile displays.
+ */
+@media (max-width: 35rem) {
+    .notice-generator-page .generator-form__actions,
+    .notice-generator-page .preview-actions {
+        flex-direction: column;
+    }
+
+    .notice-generator-page .generator-form__actions .button,
+    .notice-generator-page .preview-actions .button {
+        width: 100%;
+    }
+
+    .notice-generator-page .letter-preview {
+        padding: var(--space-lg);
+    }
+}
+
+/* Print layout */
 
 @media print {
     .notice-generator-page .site-header,
@@ -142,6 +269,12 @@
     .notice-generator-page .tool-hero,
     .notice-generator-page .generator-form,
     .notice-generator-page .preview-column > h2,
+
+    /*
+     * MEMBER 3 CHANGE:
+     * Hide the website warning and controls from the printed draft.
+     */
+    .notice-generator-page .draft-warning,
     .notice-generator-page .preview-actions,
     .notice-generator-page .copy-status,
     .notice-generator-page .notice-section {
@@ -160,5 +293,10 @@
         border: 0;
         box-shadow: none;
         padding: 0;
+        min-height: 0;
+    }
+
+    .notice-generator-page .letter-paper {
+        outline: 0;
     }
 }
