@@ -330,6 +330,87 @@ svg {
     color: var(--color-white);
 }
 
+/* Authenticated header state */
+.nav-auth-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.nav-user-display {
+    display: inline-flex;
+    min-height: 40px;
+    align-items: center;
+    gap: var(--space-xs);
+    color: var(--color-navy-900);
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.nav-user-icon {
+    display: inline-grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--color-teal-700);
+    color: var(--color-white);
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.nav-user-name {
+    overflow: hidden;
+    max-width: 9rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nav-logout-button {
+    min-height: 40px;
+    padding-inline: 0.95rem;
+    border: 1px solid var(--color-navy-700);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--color-navy-700);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        border-color var(--transition),
+        background-color var(--transition),
+        color var(--transition);
+}
+/*
+ * Keeps the Logout button typography identical across pages.
+ * The higher specificity prevents page-specific button rules
+ * from overriding the shared navigation.
+ */
+.site-header .primary-navigation .nav-logout-button {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.82rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: normal;
+    text-transform: none;
+}
+
+.nav-logout-button:hover {
+    border-color: var(--color-navy-900);
+    background: var(--color-navy-900);
+    color: var(--color-white);
+}
+
+.nav-logout-button:focus-visible {
+    outline: 3px solid rgba(15, 118, 110, 0.28);
+    outline-offset: 2px;
+}
+
 /* Hero */
 .hero {
     padding-block: clamp(3.5rem, 8vw, 6.75rem);
