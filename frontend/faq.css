@@ -37,6 +37,26 @@
     font-size: 1.25rem;
 }
 
+/* ==========================================================
+   MEMBER 3 CHANGE: FAQ review date
+   ========================================================== */
+
+.faq-page .faq-review-date {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px solid rgb(133 77 14 / 20%);
+    color: var(--color-text);
+    font-size: 0.9rem;
+}
+
+.faq-page .faq-review-date strong {
+    color: var(--color-primary-dark);
+}
+
 .faq-page .faq-workspace {
     background: var(--color-surface);
 }
@@ -337,6 +357,86 @@
     color: var(--color-text-muted);
 }
 
+/* ==========================================================
+   MEMBER 3 CHANGE: Official information sources section
+   ========================================================== */
+
+.faq-page .faq-sources-section {
+    padding: clamp(3rem, 7vw, 5.5rem) 0;
+    background: var(--color-surface);
+}
+
+.faq-page .faq-sources-card {
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg);
+    box-shadow: var(--shadow-sm);
+}
+
+.faq-page .faq-source-list {
+    display: grid;
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.faq-page .faq-source-list li {
+    min-width: 0;
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+}
+
+.faq-page .faq-source-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    color: var(--color-primary-dark);
+    text-decoration: none;
+}
+
+.faq-page .faq-source-list a:hover .faq-source-name,
+.faq-page .faq-source-list a:focus-visible .faq-source-name {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+.faq-page .faq-source-list a:focus-visible {
+    border-radius: 0.2rem;
+    outline: 3px solid rgb(15 118 110 / 30%);
+    outline-offset: 0.25rem;
+}
+
+.faq-page .faq-source-name {
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.faq-page .faq-source-domain {
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    overflow-wrap: anywhere;
+}
+
+.faq-page .faq-source-list li > p {
+    margin-top: var(--space-sm);
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+    line-height: 1.65;
+}
+
+.faq-page .faq-source-note {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+    line-height: 1.65;
+}
+
 .faq-page .faq-help-section {
     padding-block: clamp(3.5rem, 8vw, 5.5rem);
     background: var(--color-section);
@@ -398,6 +498,11 @@
 
     .faq-page .faq-category-link {
         padding-inline: var(--space-md);
+    }
+
+    /* MEMBER 3 CHANGE: Display official source cards in columns. */
+    .faq-page .faq-source-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
