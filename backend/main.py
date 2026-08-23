@@ -4,6 +4,7 @@ import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from backend import config
@@ -50,6 +51,11 @@ def health_check() -> dict[str, str]:
 def google_client_id() -> dict[str, str]:
     """Expose the public Google OAuth client ID to the frontend."""
     return {"client_id": config.GOOGLE_OAUTH_CLIENT_ID}
+
+
+@app.get("/RiskAnalyzer_LegalSimple.html", include_in_schema=False)
+def redirect_legacy_risk_analyzer() -> RedirectResponse:
+    return RedirectResponse("/risk_analyzer.html")
 
 
 # Serving the existing static frontend here avoids CORS during the simplest local setup.
